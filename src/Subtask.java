@@ -1,11 +1,9 @@
 public class Subtask extends Task {
     private int idEpic;
 
-    public Subtask(String taskName, String taskInfo, Integer idEpic) {
+    public Subtask(String taskName, String taskInfo) {
         super(taskName, taskInfo);
-        String subtaskStatus = "";
         this.idEpic = idEpic;
-        taskId = 0;
     }
 
     public int getIdEpic() {

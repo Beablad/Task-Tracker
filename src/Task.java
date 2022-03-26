@@ -7,8 +7,7 @@ public class Task {
     public Task(String taskName, String taskInfo) {
         this.taskName = taskName;
         this.taskInfo = taskInfo;
-        this.taskStatus = "";
-        taskId = 0;
+        this.taskStatus = "NEW";
     }
 
     public int getTaskId() {

@@ -31,11 +31,11 @@ public class Manager {
         epicList.put(epic.getTaskId(), epic);
     }
 
-    public void putSubtask(Subtask subtask, String status) {
+    public void putSubtask(Subtask subtask, Epic epic, String status) {
         subtask.setTaskStatus(status);
         subtask.setTaskId(getId());
-        Epic epic = epicList.get(subtask.getIdEpic());
-        epic.setListOfSubtask(subtask);
+        subtask.setIdEpic(epic.getTaskId());
+        epic.addSubtaskInEpic(subtask);
         subtaskList.put(subtask.getTaskId(), subtask);
         checkEpicStatus(epic);
     }
@@ -89,21 +89,24 @@ public class Manager {
         subtaskList.clear();
     }
 
-    public void removeTask(int id) {
+    public void removeTaskById(int id) {
         taskList.remove(id);
     }
 
-    public void removeEpic(int id) {
+    public void removeEpicById(int id) {
         Epic epic = epicList.get(id);
         ArrayList<Subtask> subtasks = epic.getListOfSubtask();
-        for(Subtask subtask:subtasks){
+        for (Subtask subtask : subtasks) {
             int subId = subtask.getTaskId();
             subtaskList.remove(subId);
         }
         epicList.remove(id);
     }
 
-    public void removeSubtask(int id) {
+    public void removeSubtaskById(int id) {
+        Subtask subtask = subtaskList.get(id);
+        Epic epic = epicList.get(subtask.getIdEpic());
+        epic.removeSubtaskInEpic(subtask);
         subtaskList.remove(id);
     }
 

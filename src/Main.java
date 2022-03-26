@@ -9,11 +9,11 @@ public class Main {
         Epic epic = new Epic("Epic", "Info");
         manager.putEpic(epic);
 
-        manager.putSubtask(new Subtask("Sub", "Info", 1), "IN_PROGRESS");
-        manager.putSubtask(new Subtask("Sub2", "Info", 1), "DONE");
+        manager.putSubtask(new Subtask("Sub", "Info"), epic, "IN_PROGRESS");
+        manager.putSubtask(new Subtask("Sub2", "Info"), epic, "DONE");
         System.out.println(manager.returnEpicInfo());
         System.out.println(manager.returnSubtaskInfo());
-        manager.removeEpic(1);
+        manager.removeEpicById(1);
         System.out.println(manager.returnEpicInfo());
         System.out.println(manager.returnSubtaskInfo());
     }

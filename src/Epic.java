@@ -12,8 +12,12 @@ public class Epic extends Task {
         return listOfSubtask;
     }
 
-    public void setListOfSubtask(Subtask subtask) {
+    public void addSubtaskInEpic(Subtask subtask) {
         listOfSubtask.add(subtask);
+    }
+
+    public void removeSubtaskInEpic(Subtask subtask) {
+        listOfSubtask.remove(subtask);
     }
 
     @Override
