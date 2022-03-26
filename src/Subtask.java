@@ -1,9 +1,21 @@
 public class Subtask extends Task {
-    int idEpic;
-    public Subtask(String taskName, String taskInfo, String taskStatus, Integer idEpic) {
-        super(taskName, taskInfo, taskStatus);
+    private int idEpic;
+
+    public Subtask(String taskName, String taskInfo, Integer idEpic) {
+        super(taskName, taskInfo);
+        String subtaskStatus = "";
+        this.idEpic = idEpic;
+        taskId = 0;
+    }
+
+    public int getIdEpic() {
+        return idEpic;
+    }
+
+    public void setIdEpic(int idEpic) {
         this.idEpic = idEpic;
     }
+
 
     @Override
     public String toString() {
@@ -12,6 +24,7 @@ public class Subtask extends Task {
                 ", taskName='" + taskName + '\'' +
                 ", taskInfo='" + taskInfo + '\'' +
                 ", taskStatus='" + taskStatus + '\'' +
+                ", taskId=" + taskId +
                 '}';
     }
 }

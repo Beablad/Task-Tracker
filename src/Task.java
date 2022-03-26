@@ -1,21 +1,22 @@
 public class Task {
-    String taskName;
-    String taskInfo;
-    String taskStatus;
+    protected String taskName;
+    protected String taskInfo;
+    protected String taskStatus;
+    protected int taskId;
 
-    public Task(String taskName, String taskInfo, String taskStatus) {
+    public Task(String taskName, String taskInfo) {
         this.taskName = taskName;
         this.taskInfo = taskInfo;
-        this.taskStatus = taskStatus;
+        this.taskStatus = "";
+        taskId = 0;
     }
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "taskName='" + taskName + '\'' +
-                ", taskInfo='" + taskInfo + '\'' +
-                ", taskStatus='" + taskStatus + '\'' +
-                '}';
+    public int getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 
     public String getTaskName() {
@@ -40,5 +41,15 @@ public class Task {
 
     public void setTaskStatus(String taskStatus) {
         this.taskStatus = taskStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskName='" + taskName + '\'' +
+                ", taskInfo='" + taskInfo + '\'' +
+                ", taskStatus='" + taskStatus + '\'' +
+                ", taskId=" + taskId +
+                '}';
     }
 }
