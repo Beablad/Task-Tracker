@@ -1,3 +1,10 @@
+package managers;
+
+import tasks.Epic;
+import tasks.Statuses;
+import tasks.Subtask;
+import tasks.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,4 +47,6 @@ public interface TaskManager {
     public void updateEpic(Epic epic);
 
     public ArrayList<Subtask> getAllSubtasksOfEpic(int id);
+
+    public ArrayList<Task> getHistory();
 }

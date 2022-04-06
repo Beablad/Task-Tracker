@@ -1,3 +1,10 @@
+package managers;
+
+import tasks.Epic;
+import tasks.Statuses;
+import tasks.Subtask;
+import tasks.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -6,14 +13,12 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epicList;
     private HashMap<Integer, Subtask> subtaskList;
     private int taskId;
-    private ArrayList<Task> history;
-    private final int HISTORY_MAX_SIZE = 10;
+    HistoryManager inMemoryHistoryManager =  Managers.getDefaultHistoryManager();
 
     public InMemoryTaskManager() {
         this.taskList = new HashMap<>();
         this.epicList = new HashMap<>();
         this.subtaskList = new HashMap<>();
-        this.history = new ArrayList<>();
         this.taskId = 1;
     }
 
@@ -139,7 +144,7 @@ public class InMemoryTaskManager implements TaskManager {
             int newCounter = 0;
             int doneCounter = 0;
             for (Subtask subtask : subtasks) {
-                listOfStatuses.add(subtask.taskStatus);
+                listOfStatuses.add(subtask.getTaskStatus());
             }
             for (Statuses status : listOfStatuses) {
                 if (status.equals(Statuses.DONE)) {
@@ -169,7 +174,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task returnTaskById(int id) {
         Task task = taskList.get(id);
-        addHistory(task);
+        inMemoryHistoryManager.addHistory(task);
         if (task != null) {
             return task;
         }
@@ -179,7 +184,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic returnEpicById(int id) {
         Epic epic = epicList.get(id);
-        addHistory(epic);
+        inMemoryHistoryManager.addHistory(epic);
         if (epic != null) {
             return epic;
         }
@@ -189,23 +194,15 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask returnSubtaskById(int id) {
         Subtask subtask = subtaskList.get(id);
-        addHistory(subtask);
+        inMemoryHistoryManager.addHistory(subtask);
         if (subtask != null) {
             return subtask;
         }
         return null;
     }
 
-    private void addHistory(Task task) {
-        if (history.size()< HISTORY_MAX_SIZE){
-            history.add(task);
-        } else {
-            history.remove(0);
-            history.add(task);
-        }
+    public ArrayList<Task> getHistory() {
+        return inMemoryHistoryManager.getHistory();
     }
 
-    public ArrayList<Task> getHistory(){
-        return history;
-    }
 }

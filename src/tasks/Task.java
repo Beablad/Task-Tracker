@@ -1,3 +1,5 @@
+package tasks;
+
 public class Task {
     protected String taskName;
     protected String taskInfo;
@@ -44,7 +46,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "Tasks.Task{" +
                 "taskName='" + taskName + '\'' +
                 ", taskInfo='" + taskInfo + '\'' +
                 ", taskStatus='" + taskStatus + '\'' +

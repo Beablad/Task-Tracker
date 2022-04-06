@@ -1,11 +1,18 @@
+package managers;
+
+import tasks.Epic;
+import tasks.Statuses;
+import tasks.Subtask;
+import tasks.Task;
+
 public class Main {
     public static void main(String[] args) {
-        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+        TaskManager inMemoryTaskManager = Managers.getDefault();
         Task task = new Task("task", "info");
         inMemoryTaskManager.putTask(task, Statuses.NEW);
         System.out.println(inMemoryTaskManager.returnTaskInfo());
 
-        Epic epic = new Epic("Epic", "Info");
+        Epic epic = new Epic("Tasks.Epic", "Info");
         inMemoryTaskManager.putEpic(epic);
 
         inMemoryTaskManager.putSubtask(new Subtask("Sub", "Info"), epic, Statuses.DONE);
