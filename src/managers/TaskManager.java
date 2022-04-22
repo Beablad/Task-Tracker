@@ -49,4 +49,6 @@ public interface TaskManager {
     public ArrayList<Subtask> getAllSubtasksOfEpic(int id);
 
     public ArrayList<Task> getHistory();
+
+    public void removeHistory(int id);
 }

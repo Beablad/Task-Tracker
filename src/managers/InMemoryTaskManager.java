@@ -6,6 +6,7 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -13,7 +14,8 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epicList;
     private HashMap<Integer, Subtask> subtaskList;
     private int taskId;
-    HistoryManager inMemoryHistoryManager =  Managers.getDefaultHistoryManager();
+    HistoryManager inMemoryHistoryManager = Managers.getDefaultHistoryManager();
+    int[] a = new int[2];
 
     public InMemoryTaskManager() {
         this.taskList = new HashMap<>();
@@ -31,6 +33,7 @@ public class InMemoryTaskManager implements TaskManager {
         task.setTaskStatus(status);
         task.setTaskId(getId());
         taskList.put(task.getTaskId(), task);
+        Arrays.binarySearch(a, 0);
     }
 
     @Override
@@ -174,7 +177,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task returnTaskById(int id) {
         Task task = taskList.get(id);
-        inMemoryHistoryManager.addHistory(task);
+        inMemoryHistoryManager.add(task);
         if (task != null) {
             return task;
         }
@@ -184,7 +187,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic returnEpicById(int id) {
         Epic epic = epicList.get(id);
-        inMemoryHistoryManager.addHistory(epic);
+        inMemoryHistoryManager.add(epic);
         if (epic != null) {
             return epic;
         }
@@ -194,15 +197,20 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask returnSubtaskById(int id) {
         Subtask subtask = subtaskList.get(id);
-        inMemoryHistoryManager.addHistory(subtask);
+        inMemoryHistoryManager.add(subtask);
         if (subtask != null) {
             return subtask;
         }
         return null;
     }
 
+    @Override
     public ArrayList<Task> getHistory() {
         return inMemoryHistoryManager.getHistory();
     }
 
+    @Override
+    public void removeHistory(int id){
+        inMemoryHistoryManager.remove(id);
+    }
 }
