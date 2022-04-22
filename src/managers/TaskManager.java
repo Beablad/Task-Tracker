@@ -10,45 +10,45 @@ import java.util.HashMap;
 
 public interface TaskManager {
 
-    public void putTask(Task task, Statuses status);
+    void putTask(Task task, Statuses status);
 
-    public void putEpic(Epic epic);
+    void putEpic(Epic epic);
 
-    public void putSubtask(Subtask subtask, Epic epic, Statuses status);
+    void putSubtask(Subtask subtask, Epic epic, Statuses status);
 
-    public HashMap returnTaskInfo();
+    HashMap returnTaskInfo();
 
-    public HashMap returnEpicInfo();
+    HashMap returnEpicInfo();
 
-    public HashMap returnSubtaskInfo();
+    HashMap returnSubtaskInfo();
 
-    public Task returnTaskById(int id);
+    Task returnTaskById(int id);
 
-    public Epic returnEpicById(int id);
+    Epic returnEpicById(int id);
 
-    public Subtask returnSubtaskById(int id);
+    Subtask returnSubtaskById(int id);
 
-    public void clearTaskList();
+    void clearTaskList();
 
-    public void clearEpicList();
+    void clearEpicList();
 
-    public void clearSubtaskList();
+    void clearSubtaskList();
 
-    public void removeTaskById(int id);
+    void removeTaskById(int id);
 
-    public void removeEpicById(int id);
+    void removeEpicById(int id);
 
-    public void removeSubtaskById(int id);
+    void removeSubtaskById(int id);
 
-    public void updateTask(Task task, Statuses status);
+    void updateTask(Task task, Statuses status);
 
-    public void updateSubtask(Subtask subtask);
+    void updateSubtask(Subtask subtask);
 
-    public void updateEpic(Epic epic);
+    void updateEpic(Epic epic);
 
-    public ArrayList<Subtask> getAllSubtasksOfEpic(int id);
+    ArrayList<Subtask> getAllSubtasksOfEpic(int id);
 
-    public ArrayList<Task> getHistory();
+    ArrayList<Task> getHistory();
 
-    public void removeHistory(int id);
+    void removeHistory(int id);
 }

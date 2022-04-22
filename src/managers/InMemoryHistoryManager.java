@@ -42,8 +42,10 @@ public class InMemoryHistoryManager implements HistoryManager {
                 }
             }
             removeNode(history.get(id));
+            history.remove(id);
         } else if (history.containsKey(id)) {
             removeNode(history.get(id));
+            history.remove(id);
         }
     }
 
@@ -59,7 +61,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         last = newNode;
         if (oldLast == null) {
             first = newNode;
-        } else oldLast.next = newNode;
+        } else {
+            oldLast.next = newNode;
+        }
         history.put(data.getTaskId(), newNode);
     }
 
@@ -79,17 +83,14 @@ public class InMemoryHistoryManager implements HistoryManager {
             n.next.prev = n.prev;
             n.prev = null;
             n.next = null;
-            history.remove(n.data.getTaskId());
         } else if (n.next == null && n.prev != null) {
             n.prev.next = null;
             last = n.prev;
             n.prev = null;
-            history.remove(n.data.getTaskId());
         } else if (n.prev == null && n.next != null) {
             n.next.prev = null;
             first = n.next;
             n.next = null;
-            history.remove(n.data.getTaskId());
         }
     }
 

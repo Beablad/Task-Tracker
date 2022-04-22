@@ -30,7 +30,7 @@ public class Main {
         inMemoryTaskManager.returnTaskById(2);
         inMemoryTaskManager.returnTaskById(1);
         System.out.println("История после добавления дубликатов: " + inMemoryTaskManager.getHistory());
-        //inMemoryTaskManager.removeHistory(1);
+        inMemoryTaskManager.removeHistory(1);
         System.out.println("История после удаления задачи: " + inMemoryTaskManager.getHistory());
         inMemoryTaskManager.returnSubtaskById(5);
         inMemoryTaskManager.returnSubtaskById(4);
