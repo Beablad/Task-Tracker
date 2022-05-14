@@ -1,7 +1,4 @@
-import managers.HistoryManager;
-import managers.InMemoryHistoryManager;
-import managers.Managers;
-import managers.TaskManager;
+import managers.*;
 import tasks.Epic;
 import tasks.Statuses;
 import tasks.Subtask;
@@ -9,7 +6,9 @@ import tasks.Task;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager inMemoryTaskManager = Managers.getDefault();
+
+
+        /*TaskManager inMemoryTaskManager = Managers.getDefault();
         HistoryManager historyManager = Managers.getDefaultHistoryManager();
         Task task = new Task("Task1", "info");// id=1
         Task task2 = new Task("Task2", "info");// id=2
@@ -37,7 +36,7 @@ public class Main {
         inMemoryTaskManager.returnEpicById(3);
         System.out.println("История после добавления эпика с подзадачами: " + inMemoryTaskManager.getHistory());
         inMemoryTaskManager.removeHistory(3);
-        System.out.println("История после удаления эпика: " + inMemoryTaskManager.getHistory());
+        System.out.println("История после удаления эпика: " + inMemoryTaskManager.getHistory());*/
 
     }
 }

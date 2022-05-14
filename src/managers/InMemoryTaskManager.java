@@ -10,9 +10,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
-    private HashMap<Integer, Task> taskList;
-    private HashMap<Integer, Epic> epicList;
-    private HashMap<Integer, Subtask> subtaskList;
+    protected HashMap<Integer, Task> taskList;
+    protected HashMap<Integer, Epic> epicList;
+    protected HashMap<Integer, Subtask> subtaskList;
     private int taskId;
     HistoryManager inMemoryHistoryManager = Managers.getDefaultHistoryManager();
     int[] a = new int[2];
@@ -33,7 +33,6 @@ public class InMemoryTaskManager implements TaskManager {
         task.setTaskStatus(status);
         task.setTaskId(getId());
         taskList.put(task.getTaskId(), task);
-        Arrays.binarySearch(a, 0);
     }
 
     @Override
