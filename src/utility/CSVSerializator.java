@@ -42,7 +42,7 @@ public class CSVSerializator {
             }
             return list;
         } catch (IOException e) {
-            throw new ManagerSaveException();
+            throw new ManagerSaveException("В указанной директории нет файла");
         }
     }
 
@@ -59,8 +59,10 @@ public class CSVSerializator {
     public static List<String> historyFromString() {
         List<String> list = new ArrayList<>();
         try (BufferedReader bw = new BufferedReader(new FileReader("tracker.csv"))){
-            while (!bw.readLine().equals("")){
-                bw.readLine();
+            while (bw.ready()){
+                if (bw.readLine().equals("")){
+                    break;
+                }
             }
             String str = bw.readLine();
             if (str!=null){
@@ -73,7 +75,7 @@ public class CSVSerializator {
                 }
             }
         } catch (IOException e){
-            System.out.println("");
+            throw new ManagerSaveException("В указанной директории нет файла");
         }
         return list;
     }

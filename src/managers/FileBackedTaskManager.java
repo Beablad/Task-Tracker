@@ -15,7 +15,7 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    CSVSerializator csv = new CSVSerializator();
+    private CSVSerializator csv = new CSVSerializator();
 
 
     private void save() {
@@ -32,7 +32,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             bufferedWriter.append("\n" + CSVSerializator.historyToString(inMemoryHistoryManager));
         } catch (IOException e) {
-            throw new ManagerSaveException();
+            throw new ManagerSaveException("В указанной директории нет файла");
         }
     }
 
@@ -166,7 +166,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         TaskManager inMemoryTaskManager = loadFromFile();
         HistoryManager historyManager = Managers.getDefaultHistoryManager();
         System.out.println(inMemoryTaskManager.getHistory());
-        /*Task task = new Task("Task1", "info");// id=1
+        Task task = new Task("Task1", "info");// id=1
         Task task2 = new Task("Task2", "info");// id=2
         Epic epic = new Epic("Epic", "info");// id=3
         Subtask subtask = new Subtask("Subtask", "info");// id=4
@@ -192,6 +192,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         inMemoryTaskManager.returnEpicById(3);
         System.out.println("История после добавления эпика с подзадачами: " + inMemoryTaskManager.getHistory());
         //inMemoryTaskManager.removeHistory(3);
-        System.out.println("История после удаления эпика: " + inMemoryTaskManager.getHistory());*/
+        System.out.println("История после удаления эпика: " + inMemoryTaskManager.getHistory());
     }
 }
