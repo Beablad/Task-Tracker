@@ -10,6 +10,7 @@ import utility.ManagerSaveException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -29,9 +30,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             for (Epic epic : epicList.values()) {
                 bufferedWriter.append(csv.toString(epic) + "\n");
             }
-            bufferedWriter.append("\n" + CSVSerializator.historyToString());
+            bufferedWriter.append("\n" + CSVSerializator.historyToString(inMemoryHistoryManager));
         } catch (IOException e) {
-            throw new ManagerSaveException("");
+            throw new ManagerSaveException();
         }
     }
 
@@ -70,6 +71,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     subtask.setTaskInfo(array[4]);
                     subtask.setIdEpic(Integer.parseInt(array[5]));
                     subtaskList.put(Integer.parseInt(array[0]), subtask);
+                }
+            }
+        }
+        List<String> historyList = CSVSerializator.historyFromString();
+        if (!historyList.isEmpty()){
+            for (String str: historyList){
+                int id = Integer.parseInt(str);
+                if(taskList.containsKey(id)){
+                    inMemoryHistoryManager.add(taskList.get(id));
+                } else if (epicList.containsKey(id)){
+                    inMemoryHistoryManager.add(epicList.get(id));
+                } else if (subtaskList.containsKey(id)){
+                    inMemoryHistoryManager.add(subtaskList.get(id));
                 }
             }
         }
@@ -143,10 +157,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return subtask;
     }
 
+    @Override
+    public ArrayList<Task> getHistory() {
+        return super.getHistory();
+    }
+
     public static void main(String[] args) {
         TaskManager inMemoryTaskManager = loadFromFile();
         HistoryManager historyManager = Managers.getDefaultHistoryManager();
-        Task task = new Task("Task1", "info");// id=1
+        System.out.println(inMemoryTaskManager.getHistory());
+        /*Task task = new Task("Task1", "info");// id=1
         Task task2 = new Task("Task2", "info");// id=2
         Epic epic = new Epic("Epic", "info");// id=3
         Subtask subtask = new Subtask("Subtask", "info");// id=4
@@ -172,6 +192,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         inMemoryTaskManager.returnEpicById(3);
         System.out.println("История после добавления эпика с подзадачами: " + inMemoryTaskManager.getHistory());
         //inMemoryTaskManager.removeHistory(3);
-        System.out.println("История после удаления эпика: " + inMemoryTaskManager.getHistory());
+        System.out.println("История после удаления эпика: " + inMemoryTaskManager.getHistory());*/
     }
 }

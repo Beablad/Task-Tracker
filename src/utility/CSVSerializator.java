@@ -1,7 +1,6 @@
 package utility;
 
-import managers.InMemoryTaskManager;
-import managers.TaskManager;
+import managers.*;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -43,31 +42,35 @@ public class CSVSerializator {
             }
             return list;
         } catch (IOException e) {
-            throw new ManagerSaveException("");
+            throw new ManagerSaveException();
         }
     }
 
-    public static String historyToString() {
-        TaskManager manager = new InMemoryTaskManager();
-        List<Task> list = manager.getHistory();
+    public static String historyToString(HistoryManager historyManager) {
+        List<Task> list = historyManager.getHistory();
         StringBuilder sb = new StringBuilder();
         for (Task task : list) {
             sb.append(task.getTaskId()+",");
         }
+
         return sb.toString();
     }
 
     public static List<String> historyFromString() {
         List<String> list = new ArrayList<>();
         try (BufferedReader bw = new BufferedReader(new FileReader("tracker.csv"))){
-            String str = bw.readLine();
-            while (!str.equals("")){
+            while (!bw.readLine().equals("")){
                 bw.readLine();
             }
-            str = bw.readLine();
-            String[] array = str.split(",");
-            for (int i = 0; i < array.length; i++) {
-                list.add(array[i]);
+            String str = bw.readLine();
+            if (str!=null){
+                StringBuilder sb = new StringBuilder(str);
+                sb.reverse();
+                sb.deleteCharAt(0);
+                String[] array = sb.toString().split(",");
+                for (int i = 0; i < array.length; i++) {
+                    list.add(array[i]);
+                }
             }
         } catch (IOException e){
             System.out.println("");
