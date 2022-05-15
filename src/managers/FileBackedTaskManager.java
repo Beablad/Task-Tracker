@@ -157,11 +157,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return subtask;
     }
 
-    @Override
-    public ArrayList<Task> getHistory() {
-        return super.getHistory();
-    }
-
     public static void main(String[] args) {
         TaskManager inMemoryTaskManager = loadFromFile();
         HistoryManager historyManager = Managers.getDefaultHistoryManager();
