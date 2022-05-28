@@ -22,7 +22,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void add(Task task) {
         if (history.containsKey(task.getTaskId())) {
-            removeNode(history.get(task.getTaskId()));
+            remove(task.getTaskId());
             linkLast(task);
         } else if (history.size() < HISTORY_MAX_SIZE) {
             linkLast(task);
@@ -91,6 +91,9 @@ public class InMemoryHistoryManager implements HistoryManager {
             n.next.prev = null;
             first = n.next;
             n.next = null;
+        } else {
+            first = null;
+            last = null;
         }
     }
 

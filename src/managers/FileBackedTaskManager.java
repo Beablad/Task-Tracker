@@ -59,7 +59,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     epic.setTaskStatus(statuses(array[3]));
                     epic.setTaskInfo(array[4]);
                     for (Subtask subtask : subtaskList.values()) {
-                        if (subtask.getTaskId() == Integer.parseInt(array[0])) {
+                        if (subtask.getIdEpic() == Integer.parseInt(array[0])) {
                             epic.addSubtaskInEpic(subtask);
                         }
                     }
@@ -136,6 +136,49 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
+
+    @Override
+    public void clearTaskList() {
+        super.clearTaskList();
+        save();
+    }
+
+    @Override
+    public void clearEpicList() {
+        super.clearEpicList();
+        save();
+    }
+
+    @Override
+    public void clearSubtaskList() {
+        super.clearSubtaskList();
+        save();
+    }
+
+    @Override
+    public void removeTaskById(int id) {
+        super.removeTaskById(id);
+        save();
+    }
+
+    @Override
+    public void removeEpicById(int id) {
+        super.removeEpicById(id);
+        save();
+    }
+
+    @Override
+    public void removeSubtaskById(int id) {
+        super.removeSubtaskById(id);
+        save();
+    }
+
+    @Override
+    public void removeHistory(int id) {
+        super.removeHistory(id);
+        save();
+    }
+
     @Override
     public Task returnTaskById(int id) {
         Task task = super.returnTaskById(id);
@@ -160,7 +203,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static void main(String[] args) {
         TaskManager inMemoryTaskManager = loadFromFile();
         HistoryManager historyManager = Managers.getDefaultHistoryManager();
-        System.out.println(inMemoryTaskManager.getHistory());
+        System.out.println(inMemoryTaskManager.getAllSubtasksOfEpic(3));
+        /*System.out.println(inMemoryTaskManager.getHistory());
         Task task = new Task("Task1", "info");// id=1
         Task task2 = new Task("Task2", "info");// id=2
         Epic epic = new Epic("Epic", "info");// id=3
@@ -187,6 +231,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         inMemoryTaskManager.returnEpicById(3);
         System.out.println("История после добавления эпика с подзадачами: " + inMemoryTaskManager.getHistory());
         //inMemoryTaskManager.removeHistory(3);
-        System.out.println("История после удаления эпика: " + inMemoryTaskManager.getHistory());
+        System.out.println("История после удаления эпика: " + inMemoryTaskManager.getHistory());*/
     }
 }

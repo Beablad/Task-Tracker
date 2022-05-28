@@ -52,7 +52,6 @@ public class CSVSerializator {
         for (Task task : list) {
             sb.append(task.getTaskId()+",");
         }
-
         return sb.toString();
     }
 
