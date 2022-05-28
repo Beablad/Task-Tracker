@@ -1,13 +1,14 @@
 package tasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Epic extends Task {
     private ArrayList<Subtask> listOfSubtask;
 
-    public Epic(String taskName, String taskInfo) {
-        super(taskName, taskInfo);
+    public Epic(String taskName, String taskInfo, LocalDateTime startTime, long duration) {
+        super(taskName, taskInfo, startTime, duration);
         this.listOfSubtask = new ArrayList<>();
     }
 

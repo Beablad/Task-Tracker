@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import tasks.Statuses;
 import tasks.Task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,8 @@ public class HistoryManagerTest {
     @Test
     void emptyHistoryAdd(){
         HistoryManager hm = Managers.getDefaultHistoryManager();
-        Task task = new Task("a", "b");
+        Task task = new Task("a", "b",
+                LocalDateTime.of(2022, 5, 28, 10, 0), 180);
         hm.add(task);
         List<Task> tasks = List.of(task);
         assertEquals(tasks, hm.getHistory());

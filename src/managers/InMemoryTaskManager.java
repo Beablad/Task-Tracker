@@ -13,9 +13,8 @@ public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Task> taskList;
     protected HashMap<Integer, Epic> epicList;
     protected HashMap<Integer, Subtask> subtaskList;
-    private int taskId;
+    private static int taskId;
     HistoryManager inMemoryHistoryManager = Managers.getDefaultHistoryManager();
-    int[] a = new int[2];
 
     public InMemoryTaskManager() {
         this.taskList = new HashMap<>();
@@ -24,7 +23,7 @@ public class InMemoryTaskManager implements TaskManager {
         this.taskId = 1;
     }
 
-    private int getId() {
+    public static int getId() {
         return taskId++;
     }
 
