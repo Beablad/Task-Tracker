@@ -37,7 +37,7 @@ public class Epic extends Task {
             this.duration = listOfSubtask.get(0).getDuration();
         }
     }
-
+//
     private ArrayList<Subtask> sortedSubtaskList() {
         listOfSubtask.sort(new Comparator<Subtask>() {
             @Override
