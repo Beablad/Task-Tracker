@@ -8,6 +8,7 @@ import tasks.Task;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public interface TaskManager {
 
@@ -52,4 +53,6 @@ public interface TaskManager {
     ArrayList<Task> getHistory();
 
     void removeHistory(int id);
+
+    public List<Task> getPrioritizedTask();
 }
