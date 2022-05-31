@@ -5,16 +5,17 @@ import tasks.Statuses;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface TaskManager {
 
-    void putTask(Task task, Statuses status);
+    void putTask(Task task, Statuses status, LocalDateTime startTime, long duration);
 
     void putEpic(Epic epic);
 
-    void putSubtask(Subtask subtask, Epic epic, Statuses status);
+    void putSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration);
 
     HashMap returnTaskInfo();
 
@@ -40,9 +41,9 @@ public interface TaskManager {
 
     void removeSubtaskById(int id);
 
-    void updateTask(Task task, Statuses status);
+    void updateTask(Task task, Statuses status, LocalDateTime startTime, long duration);
 
-    void updateSubtask(Subtask subtask);
+    void updateSubtask(Subtask subtask, Statuses status, LocalDateTime startTime, long duration);
 
     void updateEpic(Epic epic);
 

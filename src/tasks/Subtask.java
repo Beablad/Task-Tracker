@@ -16,15 +16,16 @@ public class Subtask extends Task {
         this.idEpic = idEpic;
     }
 
-
     @Override
     public String toString() {
-        return "Tasks.Subtask{" +
+        return "Subtask{" +
                 "idEpic=" + idEpic +
                 ", taskName='" + taskName + '\'' +
                 ", taskInfo='" + taskInfo + '\'' +
-                ", taskStatus='" + taskStatus + '\'' +
+                ", taskStatus=" + taskStatus +
                 ", taskId=" + taskId +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
     }
 }

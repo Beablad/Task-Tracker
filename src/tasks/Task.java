@@ -1,10 +1,14 @@
 package tasks;
 
+import java.time.LocalDateTime;
+
 public class Task {
     protected String taskName;
     protected String taskInfo;
     protected Statuses taskStatus;
     protected int taskId;
+    protected LocalDateTime startTime;
+    protected long duration;
 
     public Task(String taskName, String taskInfo) {
         this.taskName = taskName;
@@ -44,13 +48,42 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
+    public LocalDateTime getStartTime() {
+        if (startTime==null){
+            return null;
+        }
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime (){
+        if (startTime==null){
+            return null;
+        }
+        return startTime.plusMinutes(duration);
+    }
+
     @Override
     public String toString() {
-        return "Tasks.Task{" +
+        return "Task{" +
                 "taskName='" + taskName + '\'' +
                 ", taskInfo='" + taskInfo + '\'' +
-                ", taskStatus='" + taskStatus + '\'' +
+                ", taskStatus=" + taskStatus +
                 ", taskId=" + taskId +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
+                ", endTime" + getEndTime() +
                 '}';
     }
 }
