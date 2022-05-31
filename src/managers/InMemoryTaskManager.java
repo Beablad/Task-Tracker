@@ -4,17 +4,31 @@ import tasks.Epic;
 import tasks.Statuses;
 import tasks.Subtask;
 import tasks.Task;
+import utility.IntersectionException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Task> taskList;
     protected HashMap<Integer, Epic> epicList;
     protected HashMap<Integer, Subtask> subtaskList;
-    private static int taskId;
+    private int taskId;
     HistoryManager inMemoryHistoryManager = Managers.getDefaultHistoryManager();
+    TreeSet<Task> prioritizedTasks = new TreeSet<>(new Comparator<Task>() {
+        @Override
+        public int compare(Task o1, Task o2) {
+            if (o1.getStartTime() == (null)) {
+                return 1;
+            } else if (o2.getStartTime() == null) {
+                return -1;
+            } else if (o1.getStartTime().isAfter(o2.getStartTime())) {
+                return 1;
+            } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                return -1;
+            } else return 0;
+        }
+    });
 
     public InMemoryTaskManager() {
         this.taskList = new HashMap<>();
@@ -23,15 +37,24 @@ public class InMemoryTaskManager implements TaskManager {
         this.taskId = 1;
     }
 
-    public static int getId() {
+    private int getId() {
         return taskId++;
     }
 
     @Override
-    public void putTask(Task task, Statuses status) {
-        task.setTaskStatus(status);
-        task.setTaskId(getId());
-        taskList.put(task.getTaskId(), task);
+    public void putTask(Task task, Statuses status, LocalDateTime startTime, long duration) {
+        try {
+            if(checkIntersections(startTime, duration)){
+                task.setTaskStatus(status);
+                task.setTaskId(getId());
+                task.setStartTime(startTime);
+                task.setDuration(duration);
+                taskList.put(task.getTaskId(), task);
+                putInPrioritizedTask(task);
+            }
+        } catch (IntersectionException e){
+            e.getMessage();
+        }
     }
 
     @Override
@@ -42,13 +65,24 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void putSubtask(Subtask subtask, Epic epic, Statuses status) {
-        subtask.setTaskStatus(status);
-        subtask.setTaskId(getId());
-        subtask.setIdEpic(epic.getTaskId());
-        epic.addSubtaskInEpic(subtask);
-        subtaskList.put(subtask.getTaskId(), subtask);
-        checkEpicStatus(epic);
+    public void putSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration) {
+        try {
+            if (checkIntersections(startTime, duration)){
+                subtask.setTaskStatus(status);
+                subtask.setTaskId(getId());
+                subtask.setIdEpic(epic.getTaskId());
+                subtask.setStartTime(startTime);
+                subtask.setDuration(duration);
+                epic.addSubtaskInEpic(subtask);
+                epic.setStartTime();
+                epic.setDuration();
+                subtaskList.put(subtask.getTaskId(), subtask);
+                checkEpicStatus(epic);
+                putInPrioritizedTask(subtask);
+            }
+        } catch (IntersectionException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -107,23 +141,29 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(Task task, Statuses status) {
+    public void updateTask(Task task, Statuses status, LocalDateTime startTime, long duration) {
         Task currentTask = taskList.get(task.getTaskId());
         if (currentTask != null) {
             currentTask.setTaskName(task.getTaskName());
             currentTask.setTaskInfo(task.getTaskInfo());
             currentTask.setTaskStatus(status);
+            currentTask.setStartTime(startTime);
+            currentTask.setDuration(duration);
         }
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) {
+    public void updateSubtask(Subtask subtask, Statuses status, LocalDateTime startTime, long duration) {
         Subtask currentSubtask = subtaskList.get(subtask.getTaskId());
         if (currentSubtask != null) {
             currentSubtask.setTaskName(subtask.getTaskName());
             currentSubtask.setTaskInfo(subtask.getTaskInfo());
-            currentSubtask.setTaskStatus(subtask.getTaskStatus());
+            currentSubtask.setTaskStatus(status);
+            currentSubtask.setStartTime(startTime);
+            currentSubtask.setDuration(duration);
             Epic epic = epicList.get(subtask.getIdEpic());
+            epic.setStartTime();
+            epic.getDuration();
             checkEpicStatus(epic);
         }
     }
@@ -202,13 +242,50 @@ public class InMemoryTaskManager implements TaskManager {
         return null;
     }
 
+    private void putInPrioritizedTask(Task task) {
+        prioritizedTasks.add(task);
+    }
+
+    public List<Task> getPrioritizedTask() {
+        List<Task> list = new ArrayList<>();
+        for (Task task : prioritizedTasks) {
+            list.add(task);
+
+        }
+        return list;
+    }
+
+    private boolean checkIntersections(LocalDateTime startTime, long duration) {
+        if (startTime != null) {
+            LocalDateTime start = startTime;
+            LocalDateTime end = startTime.plusMinutes(duration);
+            for (Task checkTask : prioritizedTasks) {
+                if (checkTask.getStartTime() != null) {
+                    LocalDateTime startCheck = checkTask.getStartTime();
+                    LocalDateTime endCheck = checkTask.getEndTime();
+                    if (start.isAfter(startCheck) && end.isBefore(endCheck)) {
+                        throw new IntersectionException("Данное время уже занято");
+                    } else if (end.isAfter(startCheck)&&end.isBefore(endCheck)){
+                        throw new IntersectionException("Данное время уже занято");
+                     } else if (start.isAfter(startCheck)&&start.isBefore(endCheck)){
+                        throw new IntersectionException("Данное время уже занято");
+                    } else if (startCheck.isAfter(start)&&endCheck.isBefore(end)){
+                        throw new IntersectionException("Данное время уже занято");
+                    } else if (start.isEqual(startCheck)&&end.isEqual(endCheck)){
+                        throw new IntersectionException("Данное время уже занято");
+                    }
+                } return true;
+            }
+        } return true;
+    }
+
     @Override
     public ArrayList<Task> getHistory() {
         return inMemoryHistoryManager.getHistory();
     }
 
     @Override
-    public void removeHistory(int id){
+    public void removeHistory(int id) {
         inMemoryHistoryManager.remove(id);
     }
 }

@@ -10,17 +10,10 @@ public class Task {
     protected LocalDateTime startTime;
     protected long duration;
 
-
-    public Task(String taskName, String taskInfo, LocalDateTime startTime, long duration) {
+    public Task(String taskName, String taskInfo) {
         this.taskName = taskName;
         this.taskInfo = taskInfo;
         this.taskStatus = Statuses.NEW;
-        this.startTime = startTime;
-        this.duration = duration;
-    }
-
-    public LocalDateTime getEndTime(){
-        return startTime.plusMinutes(duration);
     }
 
     public int getTaskId() {
@@ -56,6 +49,9 @@ public class Task {
     }
 
     public LocalDateTime getStartTime() {
+        if (startTime==null){
+            return null;
+        }
         return startTime;
     }
 
@@ -71,13 +67,23 @@ public class Task {
         this.duration = duration;
     }
 
+    public LocalDateTime getEndTime (){
+        if (startTime==null){
+            return null;
+        }
+        return startTime.plusMinutes(duration);
+    }
+
     @Override
     public String toString() {
-        return "Tasks.Task{" +
+        return "Task{" +
                 "taskName='" + taskName + '\'' +
                 ", taskInfo='" + taskInfo + '\'' +
-                ", taskStatus='" + taskStatus + '\'' +
+                ", taskStatus=" + taskStatus +
                 ", taskId=" + taskId +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
+                ", endTime" + getEndTime() +
                 '}';
     }
 }

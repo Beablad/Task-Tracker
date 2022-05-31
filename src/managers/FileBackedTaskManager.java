@@ -10,6 +10,7 @@ import utility.ManagerSaveException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     epic.setTaskStatus(statuses(array[3]));
                     epic.setTaskInfo(array[4]);
                     for (Subtask subtask : subtaskList.values()) {
-                        if (subtask.getIdEpic() == Integer.parseInt(array[0])) {
+                        if (subtask.getTaskId() == Integer.parseInt(array[0])) {
                             epic.addSubtaskInEpic(subtask);
                         }
                     }
@@ -89,54 +90,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    private static Statuses statuses(String status) {
-        if (status.equals("NEW")) {
-            return Statuses.NEW;
-        } else if (status.equals("IN_PROGRESS")) {
-            return Statuses.IN_PROGRESS;
-        } else {
-            return Statuses.DONE;
-        }
-    }
-
-
-    @Override
-    public void putTask(Task task, Statuses status) {
-        super.putTask(task, status);
-        save();
-    }
-
-    @Override
-    public void putEpic(Epic epic) {
-        super.putEpic(epic);
-        save();
-    }
-
-    @Override
-    public void putSubtask(Subtask subtask, Epic epic, Statuses status) {
-        super.putSubtask(subtask, epic, status);
-        save();
-    }
-
-    @Override
-    public void updateTask(Task task, Statuses status) {
-        super.updateTask(task, status);
-        save();
-    }
-
-    @Override
-    public void updateSubtask(Subtask subtask) {
-        super.updateSubtask(subtask);
-        save();
-    }
-
-    @Override
-    public void updateEpic(Epic epic) {
-        super.updateEpic(epic);
-        save();
-    }
-
-
     @Override
     public void clearTaskList() {
         super.clearTaskList();
@@ -146,7 +99,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void clearEpicList() {
         super.clearEpicList();
-        save();
     }
 
     @Override
@@ -179,6 +131,53 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
+    private static Statuses statuses(String status) {
+        if (status.equals("NEW")) {
+            return Statuses.NEW;
+        } else if (status.equals("IN_PROGRESS")) {
+            return Statuses.IN_PROGRESS;
+        } else {
+            return Statuses.DONE;
+        }
+    }
+
+
+    @Override
+    public void putTask(Task task, Statuses status, LocalDateTime startTime, long duration) {
+        super.putTask(task, status, startTime, duration);
+        save();
+    }
+
+    @Override
+    public void putEpic(Epic epic) {
+        super.putEpic(epic);
+        save();
+    }
+
+    @Override
+    public void putSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration) {
+        super.putSubtask(subtask, epic, status, startTime, duration);
+        save();
+    }
+
+    @Override
+    public void updateTask(Task task, Statuses status, LocalDateTime startTime, long duration) {
+        super.updateTask(task, status, startTime, duration);
+        save();
+    }
+
+    @Override
+    public void updateSubtask(Subtask subtask, Statuses status, LocalDateTime startTime, long duration) {
+        super.updateSubtask(subtask, status, startTime, duration);
+        save();
+    }
+
+    @Override
+    public void updateEpic(Epic epic) {
+        super.updateEpic(epic);
+        save();
+    }
+
     @Override
     public Task returnTaskById(int id) {
         Task task = super.returnTaskById(id);
@@ -201,36 +200,26 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public static void main(String[] args) {
-        TaskManager inMemoryTaskManager = loadFromFile();
-        HistoryManager historyManager = Managers.getDefaultHistoryManager();
-        System.out.println(inMemoryTaskManager.getAllSubtasksOfEpic(3));
-        /*System.out.println(inMemoryTaskManager.getHistory());
-        Task task = new Task("Task1", "info");// id=1
-        Task task2 = new Task("Task2", "info");// id=2
-        Epic epic = new Epic("Epic", "info");// id=3
-        Subtask subtask = new Subtask("Subtask", "info");// id=4
-        Subtask subtask2 = new Subtask("Subtask2", "info");// id=5
-        Subtask subtask3 = new Subtask("Subtask3", "info");// id=6
-        Epic epic1 = new Epic("Epic1", "info");// id=7
-        inMemoryTaskManager.putTask(task, Statuses.NEW);
-        inMemoryTaskManager.putTask(task2, Statuses.NEW);
-        inMemoryTaskManager.putEpic(epic);
-        inMemoryTaskManager.putSubtask(subtask, epic, Statuses.NEW);
-        inMemoryTaskManager.putSubtask(subtask2, epic, Statuses.NEW);
-        inMemoryTaskManager.putSubtask(subtask3, epic, Statuses.NEW);
-        inMemoryTaskManager.putEpic(epic1);
-        inMemoryTaskManager.returnTaskById(2);
-        inMemoryTaskManager.returnTaskById(1);
-        inMemoryTaskManager.returnTaskById(2);
-        inMemoryTaskManager.returnTaskById(1);
-        System.out.println("История после добавления дубликатов: " + inMemoryTaskManager.getHistory());
-        //inMemoryTaskManager.removeHistory(1);
-        System.out.println("История после удаления задачи: " + inMemoryTaskManager.getHistory());
-        inMemoryTaskManager.returnSubtaskById(5);
-        inMemoryTaskManager.returnSubtaskById(4);
-        inMemoryTaskManager.returnEpicById(3);
-        System.out.println("История после добавления эпика с подзадачами: " + inMemoryTaskManager.getHistory());
-        //inMemoryTaskManager.removeHistory(3);
-        System.out.println("История после удаления эпика: " + inMemoryTaskManager.getHistory());*/
+        FileBackedTaskManager fb = new FileBackedTaskManager();
+        Task task = new Task("a", "b");
+        fb.putTask(task, Statuses.IN_PROGRESS, LocalDateTime.of(2022, 5, 30, 19, 30),
+                60);
+        Epic epic = new Epic("Epic", "Epic");
+        fb.putEpic(epic);
+        Subtask subtask1 = new Subtask("1", "1");
+        Subtask subtask2 = new Subtask("2", "2");
+        Subtask subtask3 = new Subtask("3", "3");
+        fb.putSubtask(subtask1, epic, Statuses.IN_PROGRESS,
+                LocalDateTime.of(2022, 5, 30, 9, 0), 60);
+        fb.putSubtask(subtask2, epic, Statuses.IN_PROGRESS,
+                LocalDateTime.of(2022, 5, 30, 9, 0), 60);
+        fb.putSubtask(subtask3, epic, Statuses.IN_PROGRESS,
+                LocalDateTime.of(2022, 5, 30, 13, 0), 60);
+        /*fb.putTask(task, Statuses.IN_PROGRESS, null,
+                60);*/
+        System.out.println(fb.returnEpicInfo());
+        System.out.println(fb.returnEpicById(3));
+        System.out.println(fb.getAllSubtasksOfEpic(2));
+
     }
 }
