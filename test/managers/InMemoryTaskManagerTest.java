@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class InMemoryTaskManagerTest {
 
@@ -139,7 +140,7 @@ class InMemoryTaskManagerTest {
     @Test
     void returnTaskByIncorrectId() {
         addTasks();
-        assertEquals(null, tm.returnTaskById(2));
+        assertNull(tm.returnTaskById(2));
     }
 
     @Test
@@ -151,7 +152,7 @@ class InMemoryTaskManagerTest {
     @Test
     void returnEpicByIncorrectId() {
         addEpics();
-        assertEquals(null, tm.returnEpicById(2));
+        assertNull(tm.returnEpicById(2));
     }
 
     @Test
@@ -165,9 +166,9 @@ class InMemoryTaskManagerTest {
     @Test
     void returnSubtaskByIncorrectId() {
         addEpicsAndSubtasks();
-        assertEquals(null, tm.returnSubtaskById(6));
-        assertEquals(null, tm.returnSubtaskById(7));
-        assertEquals(null, tm.returnSubtaskById(8));
+        assertNull(tm.returnSubtaskById(6));
+        assertNull(tm.returnSubtaskById(7));
+        assertNull(tm.returnSubtaskById(8));
     }
 
     @Test
