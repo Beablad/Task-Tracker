@@ -40,7 +40,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    private static FileBackedTaskManager loadFromFile() {
+    public static FileBackedTaskManager loadFromFile() {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
         fileBackedTaskManager.load();
         return fileBackedTaskManager;
@@ -49,7 +49,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private void load() {
         List<String> list = csv.fromString();
         for (String string : list) {
-            if (!string.contains("id,type,name,status,description,epic, startTime,duration")) {
+            if (!string.contains("id,type,name,status,description,epic,startTime,duration")) {
                 String[] array = string.split(",");
                 if (array[1].equals("TASK")) {
                     Task task = new Task(array[2], array[4]);
@@ -68,7 +68,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     subtask.setStartTime(LocalDateTime.parse(array[6]));
                     subtask.setDuration(Long.parseLong(array[7]));
                     subtaskList.put(Integer.parseInt(array[0]), subtask);
-
                 } else {
                     Epic epic = new Epic(array[2], array[4]);
                     epic.setTaskId(Integer.parseInt(array[0]));
@@ -109,6 +108,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void clearEpicList() {
         super.clearEpicList();
+        save();
     }
 
     @Override

@@ -1,6 +1,2 @@
 id,type,name,status,description,epic,startTime,duration 
-2,SUBTASK,a,DONE,b,1,2022-01-01T10:00,10
-3,SUBTASK,a,DONE,b,1,2022-01-01T12:00,10
-4,SUBTASK,a,DONE,b,1,2022-01-01T14:00,10
-1,EPIC,a,DONE,b,-,2022-01-01T10:00,250
 

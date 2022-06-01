@@ -205,15 +205,15 @@ class InMemoryTaskManagerTest {
         assertEquals(list, tm.getHistory());
     }
 
-    private void addTasks() {
+    protected void addTasks() {
         tm.putTask(task, Statuses.NEW, LocalDateTime.of(2022, 1, 1, 0, 0), 60);
     }
 
-    private void addEpics() {
+    protected void addEpics() {
         tm.putEpic(epic);
     }
 
-    private void addEpicsAndSubtasks (){
+    protected void addEpicsAndSubtasks (){
         tm.putEpic(epic);
         tm.putSubtask(subtask1, epic, Statuses.NEW, LocalDateTime.of(2022, 1, 1, 1, 0),
                 60);
