@@ -11,7 +11,10 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -21,7 +24,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("tracker.csv"))) {
-            bufferedWriter.append("id,type,name,status,description,epic \n");
+            bufferedWriter.append("id,type,name,status,description,epic,startTime,duration \n");
             for (Task task : taskList.values()) {
                 bufferedWriter.append(csv.toString(task) + "\n");
             }
@@ -46,32 +49,39 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private void load() {
         List<String> list = csv.fromString();
         for (String string : list) {
-            if (!string.contains("id,type,name,status,description,epic")) {
+            if (!string.contains("id,type,name,status,description,epic, startTime,duration")) {
                 String[] array = string.split(",");
                 if (array[1].equals("TASK")) {
                     Task task = new Task(array[2], array[4]);
                     task.setTaskId(Integer.parseInt(array[0]));
                     task.setTaskStatus(statuses(array[3]));
                     task.setTaskInfo(array[4]);
+                    task.setStartTime(LocalDateTime.parse(array[6]));
+                    task.setDuration(Long.parseLong(array[7]));
                     taskList.put(Integer.parseInt(array[0]), task);
-                } else if (array[1].equals("EPIC")) {
+                } else if (array[1].equals("SUBTASK")) {
+                    Subtask subtask = new Subtask(array[2], array[4]);
+                    subtask.setTaskId(Integer.parseInt(array[0]));
+                    subtask.setTaskStatus(statuses(array[3]));
+                    subtask.setTaskInfo(array[4]);
+                    subtask.setIdEpic(Integer.parseInt(array[5]));
+                    subtask.setStartTime(LocalDateTime.parse(array[6]));
+                    subtask.setDuration(Long.parseLong(array[7]));
+                    subtaskList.put(Integer.parseInt(array[0]), subtask);
+
+                } else {
                     Epic epic = new Epic(array[2], array[4]);
                     epic.setTaskId(Integer.parseInt(array[0]));
                     epic.setTaskStatus(statuses(array[3]));
                     epic.setTaskInfo(array[4]);
+                    epic.setStartTime();
+                    epic.setDuration();
                     for (Subtask subtask : subtaskList.values()) {
                         if (subtask.getTaskId() == Integer.parseInt(array[0])) {
                             epic.addSubtaskInEpic(subtask);
                         }
                     }
                     epicList.put(Integer.parseInt(array[0]), epic);
-                } else {
-                    Subtask subtask = new Subtask(array[2], array[4]);
-                    subtask.setTaskId(Integer.parseInt(array[0]));
-                    subtask.setTaskStatus(statuses(array[3]));
-                    subtask.setTaskInfo(array[4]);
-                    subtask.setIdEpic(Integer.parseInt(array[5]));
-                    subtaskList.put(Integer.parseInt(array[0]), subtask);
                 }
             }
         }
@@ -202,24 +212,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static void main(String[] args) {
         FileBackedTaskManager fb = new FileBackedTaskManager();
         Task task = new Task("a", "b");
-        fb.putTask(task, Statuses.IN_PROGRESS, LocalDateTime.of(2022, 5, 30, 19, 30),
+        Task task1 = new Task("a", "b");
+        fb.putTask(task, Statuses.IN_PROGRESS, null,
+                0);
+        fb.putTask(task1, Statuses.IN_PROGRESS, LocalDateTime.of(2022, 5, 30, 19, 30),
                 60);
         Epic epic = new Epic("Epic", "Epic");
         fb.putEpic(epic);
         Subtask subtask1 = new Subtask("1", "1");
         Subtask subtask2 = new Subtask("2", "2");
         Subtask subtask3 = new Subtask("3", "3");
-        fb.putSubtask(subtask1, epic, Statuses.IN_PROGRESS,
+        fb.putSubtask(subtask1, epic, Statuses.NEW,
                 LocalDateTime.of(2022, 5, 30, 9, 0), 60);
-        fb.putSubtask(subtask2, epic, Statuses.IN_PROGRESS,
-                LocalDateTime.of(2022, 5, 30, 9, 0), 60);
-        fb.putSubtask(subtask3, epic, Statuses.IN_PROGRESS,
+        fb.putSubtask(subtask2, epic, Statuses.DONE,
                 LocalDateTime.of(2022, 5, 30, 13, 0), 60);
-        /*fb.putTask(task, Statuses.IN_PROGRESS, null,
-                60);*/
+        fb.putSubtask(subtask3, epic, Statuses.DONE,
+                LocalDateTime.of(2022, 5, 30, 11, 0), 60);
         System.out.println(fb.returnEpicInfo());
-        System.out.println(fb.returnEpicById(3));
+        System.out.println(fb.returnEpicById(2));
         System.out.println(fb.getAllSubtasksOfEpic(2));
-
+        System.out.println(fb.getPrioritizedTask());
     }
 }

@@ -1,7 +1,6 @@
-id,type,name,status,description,epic 
-1,TASK,a,IN_PROGRESS,b
-3,SUBTASK,1,IN_PROGRESS,1,2
-4,SUBTASK,2,IN_PROGRESS,2,2
-5,SUBTASK,3,IN_PROGRESS,3,2
-2,EPIC,Epic,IN_PROGRESS,Epic
+id,type,name,status,description,epic,startTime,duration 
+2,SUBTASK,a,DONE,b,1,2022-01-01T10:00,10
+3,SUBTASK,a,DONE,b,1,2022-01-01T12:00,10
+4,SUBTASK,a,DONE,b,1,2022-01-01T14:00,10
+1,EPIC,a,DONE,b,-,2022-01-01T10:00,250
 

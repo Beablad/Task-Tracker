@@ -44,7 +44,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void putTask(Task task, Statuses status, LocalDateTime startTime, long duration) {
         try {
-            if(checkIntersections(startTime, duration)){
+            if (checkIntersections(startTime, duration)) {
                 task.setTaskStatus(status);
                 task.setTaskId(getId());
                 task.setStartTime(startTime);
@@ -52,7 +52,7 @@ public class InMemoryTaskManager implements TaskManager {
                 taskList.put(task.getTaskId(), task);
                 putInPrioritizedTask(task);
             }
-        } catch (IntersectionException e){
+        } catch (IntersectionException e) {
             e.getMessage();
         }
     }
@@ -67,7 +67,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void putSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration) {
         try {
-            if (checkIntersections(startTime, duration)){
+            if (checkIntersections(startTime, duration)) {
                 subtask.setTaskStatus(status);
                 subtask.setTaskId(getId());
                 subtask.setIdEpic(epic.getTaskId());
@@ -80,7 +80,7 @@ public class InMemoryTaskManager implements TaskManager {
                 checkEpicStatus(epic);
                 putInPrioritizedTask(subtask);
             }
-        } catch (IntersectionException e){
+        } catch (IntersectionException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -235,8 +235,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask returnSubtaskById(int id) {
         Subtask subtask = subtaskList.get(id);
-        inMemoryHistoryManager.add(subtask);
         if (subtask != null) {
+            inMemoryHistoryManager.add(subtask);
             return subtask;
         }
         return null;
@@ -266,18 +266,18 @@ public class InMemoryTaskManager implements TaskManager {
                     LocalDateTime endCheck = checkTask.getEndTime();
                     if (start.isAfter(startCheck) && end.isBefore(endCheck)) {
                         throw new IntersectionException("Данное время уже занято");
-                    } else if (end.isAfter(startCheck)&&end.isBefore(endCheck)){
+                    } else if (end.isAfter(startCheck) && (end.isBefore(endCheck) || end.isEqual(endCheck))) {
                         throw new IntersectionException("Данное время уже занято");
-                     } else if (start.isAfter(startCheck)&&start.isBefore(endCheck)){
+                    } else if ((start.isAfter(startCheck) || start.isEqual(startCheck)) && start.isBefore(endCheck)) {
                         throw new IntersectionException("Данное время уже занято");
-                    } else if (startCheck.isAfter(start)&&endCheck.isBefore(end)){
-                        throw new IntersectionException("Данное время уже занято");
-                    } else if (start.isEqual(startCheck)&&end.isEqual(endCheck)){
+                    } else if (startCheck.isAfter(start) && endCheck.isBefore(end)) {
                         throw new IntersectionException("Данное время уже занято");
                     }
-                } return true;
+                }
+                return true;
             }
-        } return true;
+        }
+        return true;
     }
 
     @Override
