@@ -41,7 +41,7 @@ class EpicTest {
     }
 
     @Test
-    void  checkStatusWithDoneAndNewSubtasks (){
+    void checkStatusWithDoneAndNewSubtasks() {
         fb.addEpic(epic);
         fb.addSubtask(subtask, epic, Statuses.DONE, LocalDateTime.of(2022, 1, 1, 10, 0), 10);
         fb.addSubtask(subtask1, epic, Statuses.DONE, LocalDateTime.of(2022, 1, 1, 12, 0), 10);
@@ -50,7 +50,7 @@ class EpicTest {
     }
 
     @Test
-    void checkStatusWithDInProgressSubtasks (){
+    void checkStatusWithDInProgressSubtasks() {
         fb.addEpic(epic);
         fb.addSubtask(subtask, epic, Statuses.IN_PROGRESS, LocalDateTime.of(2022, 1, 1, 10, 0), 10);
         fb.addSubtask(subtask1, epic, Statuses.IN_PROGRESS, LocalDateTime.of(2022, 1, 1, 12, 0), 10);

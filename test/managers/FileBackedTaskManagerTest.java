@@ -16,6 +16,12 @@ class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
     Epic epic = new Epic("a", "b");
 
+    @BeforeEach
+    public void setUp() {
+        taskManager = new InMemoryTaskManager();
+        init();
+    }
+
     @Test
     @BeforeEach
     void checkSaveEpicToFile() {
