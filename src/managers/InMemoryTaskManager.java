@@ -42,7 +42,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void putTask(Task task, Statuses status, LocalDateTime startTime, long duration) {
+    public void addTask(Task task, Statuses status, LocalDateTime startTime, long duration) {
         try {
             if (checkIntersections(startTime, duration)) {
                 task.setTaskStatus(status);
@@ -58,14 +58,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void putEpic(Epic epic) {
+    public void addEpic(Epic epic) {
         checkEpicStatus(epic);
         epic.setTaskId(getId());
         epicList.put(epic.getTaskId(), epic);
     }
 
     @Override
-    public void putSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration) {
+    public void addSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration) {
         try {
             if (checkIntersections(startTime, duration)) {
                 subtask.setTaskStatus(status);
@@ -86,17 +86,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HashMap returnTaskInfo() {
+    public HashMap returnTasks() {
         return taskList;
     }
 
     @Override
-    public HashMap returnEpicInfo() {
+    public HashMap returnEpic() {
         return epicList;
     }
 
     @Override
-    public HashMap returnSubtaskInfo() {
+    public HashMap returnSubtasks() {
         return subtaskList;
     }
 
@@ -213,7 +213,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task returnTaskById(int id) {
+    public Task getTaskById(int id) {
         Task task = taskList.get(id);
         if (task != null) {
             inMemoryHistoryManager.add(task);
@@ -223,7 +223,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic returnEpicById(int id) {
+    public Epic getEpicById(int id) {
         Epic epic = epicList.get(id);
         if (epic != null) {
             inMemoryHistoryManager.add(epic);
@@ -233,7 +233,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask returnSubtaskById(int id) {
+    public Subtask getSubtaskById(int id) {
         Subtask subtask = subtaskList.get(id);
         if (subtask != null) {
             inMemoryHistoryManager.add(subtask);

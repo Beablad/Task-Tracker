@@ -12,23 +12,24 @@ import java.util.List;
 
 public interface TaskManager {
 
-    void putTask(Task task, Statuses status, LocalDateTime startTime, long duration);
 
-    void putEpic(Epic epic);
+    void addTask(Task task, Statuses status, LocalDateTime startTime, long duration);
 
-    void putSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration);
+    void addEpic(Epic epic);
 
-    HashMap returnTaskInfo();
+    void addSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration);
 
-    HashMap returnEpicInfo();
+    HashMap returnTasks();
 
-    HashMap returnSubtaskInfo();
+    HashMap returnEpic();
 
-    Task returnTaskById(int id);
+    HashMap returnSubtasks();
 
-    Epic returnEpicById(int id);
+    Task getTaskById(int id);
 
-    Subtask returnSubtaskById(int id);
+    Epic getEpicById(int id);
+
+    Subtask getSubtaskById(int id);
 
     void clearTaskList();
 

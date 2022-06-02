@@ -1,7 +1,6 @@
 package managers;
 
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
 import tasks.Statuses;
 import tasks.Task;
 
@@ -75,17 +74,17 @@ class InMemoryHistoryManagerTest {
 
     private void addInHistory(){
         InMemoryTaskManager tm = new InMemoryTaskManager();
-        tm.putTask(task1, Statuses.NEW, null, 0);
-        tm.putTask(task2, Statuses.NEW, null, 0);
-        tm.putTask(task3, Statuses.NEW, null, 0);
-        tm.putTask(task4, Statuses.NEW, null, 0);
-        tm.putTask(task5, Statuses.NEW, null, 0);
-        tm.putTask(task6, Statuses.NEW, null, 0);
-        tm.putTask(task7, Statuses.NEW, null, 0);
-        tm.putTask(task8, Statuses.NEW, null, 0);
-        tm.putTask(task9, Statuses.NEW, null, 0);
-        tm.putTask(task10, Statuses.NEW, null, 0);
-        tm.putTask(task11, Statuses.DONE, null, 0);
+        tm.addTask(task1, Statuses.NEW, null, 0);
+        tm.addTask(task2, Statuses.NEW, null, 0);
+        tm.addTask(task3, Statuses.NEW, null, 0);
+        tm.addTask(task4, Statuses.NEW, null, 0);
+        tm.addTask(task5, Statuses.NEW, null, 0);
+        tm.addTask(task6, Statuses.NEW, null, 0);
+        tm.addTask(task7, Statuses.NEW, null, 0);
+        tm.addTask(task8, Statuses.NEW, null, 0);
+        tm.addTask(task9, Statuses.NEW, null, 0);
+        tm.addTask(task10, Statuses.NEW, null, 0);
+        tm.addTask(task11, Statuses.DONE, null, 0);
         hm.add(task1);
         hm.add(task2);
         hm.add(task3);

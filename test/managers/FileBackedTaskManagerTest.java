@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
     Epic epic = new Epic("a", "b");
@@ -58,7 +58,7 @@ class FileBackedTaskManagerTest {
     }
 
     protected void addEpics() {
-        fileBackedTaskManager.putEpic(epic);
+        fileBackedTaskManager.addEpic(epic);
     }
 
     private static String taskType(Task task) {

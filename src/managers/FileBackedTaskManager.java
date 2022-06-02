@@ -11,10 +11,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -153,20 +149,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 
     @Override
-    public void putTask(Task task, Statuses status, LocalDateTime startTime, long duration) {
-        super.putTask(task, status, startTime, duration);
+    public void addTask(Task task, Statuses status, LocalDateTime startTime, long duration) {
+        super.addTask(task, status, startTime, duration);
         save();
     }
 
     @Override
-    public void putEpic(Epic epic) {
-        super.putEpic(epic);
+    public void addEpic(Epic epic) {
+        super.addEpic(epic);
         save();
     }
 
     @Override
-    public void putSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration) {
-        super.putSubtask(subtask, epic, status, startTime, duration);
+    public void addSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration) {
+        super.addSubtask(subtask, epic, status, startTime, duration);
         save();
     }
 
@@ -189,22 +185,22 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Task returnTaskById(int id) {
-        Task task = super.returnTaskById(id);
+    public Task getTaskById(int id) {
+        Task task = super.getTaskById(id);
         save();
         return task;
     }
 
     @Override
-    public Epic returnEpicById(int id) {
-        Epic epic = super.returnEpicById(id);
+    public Epic getEpicById(int id) {
+        Epic epic = super.getEpicById(id);
         save();
         return epic;
     }
 
     @Override
-    public Subtask returnSubtaskById(int id) {
-        Subtask subtask = super.returnSubtaskById(id);
+    public Subtask getSubtaskById(int id) {
+        Subtask subtask = super.getSubtaskById(id);
         save();
         return subtask;
     }
@@ -213,23 +209,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         FileBackedTaskManager fb = new FileBackedTaskManager();
         Task task = new Task("a", "b");
         Task task1 = new Task("a", "b");
-        fb.putTask(task, Statuses.IN_PROGRESS, null,
+        fb.addTask(task, Statuses.IN_PROGRESS, null,
                 0);
-        fb.putTask(task1, Statuses.IN_PROGRESS, LocalDateTime.of(2022, 5, 30, 19, 30),
+        fb.addTask(task1, Statuses.IN_PROGRESS, LocalDateTime.of(2022, 5, 30, 19, 30),
                 60);
         Epic epic = new Epic("Epic", "Epic");
-        fb.putEpic(epic);
+        fb.addEpic(epic);
         Subtask subtask1 = new Subtask("1", "1");
         Subtask subtask2 = new Subtask("2", "2");
         Subtask subtask3 = new Subtask("3", "3");
-        fb.putSubtask(subtask1, epic, Statuses.NEW,
+        fb.addSubtask(subtask1, epic, Statuses.NEW,
                 LocalDateTime.of(2022, 5, 30, 9, 0), 60);
-        fb.putSubtask(subtask2, epic, Statuses.DONE,
+        fb.addSubtask(subtask2, epic, Statuses.DONE,
                 LocalDateTime.of(2022, 5, 30, 13, 0), 60);
-        fb.putSubtask(subtask3, epic, Statuses.DONE,
+        fb.addSubtask(subtask3, epic, Statuses.DONE,
                 LocalDateTime.of(2022, 5, 30, 11, 0), 60);
-        System.out.println(fb.returnEpicInfo());
-        System.out.println(fb.returnEpicById(2));
+        System.out.println(fb.returnEpic());
+        System.out.println(fb.getEpicById(2));
         System.out.println(fb.getAllSubtasksOfEpic(2));
         System.out.println(fb.getPrioritizedTask());
     }
