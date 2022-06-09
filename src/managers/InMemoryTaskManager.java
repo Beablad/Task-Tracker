@@ -13,7 +13,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Task> taskList;
     protected HashMap<Integer, Epic> epicList;
     protected HashMap<Integer, Subtask> subtaskList;
-    private int taskId;
+    private static int taskId;
     HistoryManager inMemoryHistoryManager = Managers.getDefaultHistoryManager();
     TreeSet<Task> prioritizedTasks = new TreeSet<>(new Comparator<Task>() {
         @Override
@@ -37,7 +37,7 @@ public class InMemoryTaskManager implements TaskManager {
         this.taskId = 1;
     }
 
-    private int getId() {
+    public static int getId() {
         return taskId++;
     }
 
@@ -45,7 +45,6 @@ public class InMemoryTaskManager implements TaskManager {
     public void addTask(Task task) {
         try {
             if (checkIntersections(task.getStartTime(), task.getDuration())) {
-                task.setTaskId(getId());
                 taskList.put(task.getTaskId(), task);
                 putInPrioritizedTask(task);
             }
@@ -57,16 +56,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addEpic(Epic epic) {
         checkEpicStatus(epic);
-        epic.setTaskId(getId());
         epicList.put(epic.getTaskId(), epic);
     }
 
     @Override
-    public void addSubtask(Subtask subtask, Epic epic) {
+    public void addSubtask(Subtask subtask) {
         try {
             if (checkIntersections(subtask.getStartTime(), subtask.getDuration())) {
-                subtask.setTaskId(getId());
-                subtask.setIdEpic(epic.getTaskId());
+                Epic epic = epicList.get(subtask.getIdEpic());
                 epic.addSubtaskInEpic(subtask);
                 epic.setStartTime();
                 epic.setDuration();

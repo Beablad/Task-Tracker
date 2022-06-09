@@ -1,5 +1,7 @@
 package tasks;
 
+import managers.InMemoryTaskManager;
+
 import java.time.LocalDateTime;
 
 public class Task {
@@ -16,6 +18,7 @@ public class Task {
         this.taskStatus = status;
         this.startTime = startTime;
         this.duration = duration;
+        this.taskId = InMemoryTaskManager.getId();
     }
 
     public Task() {

@@ -15,7 +15,7 @@ public interface TaskManager {
 
     void addEpic(Epic epic);
 
-    void addSubtask(Subtask subtask, Epic epic);
+    void addSubtask(Subtask subtask);
 
     HashMap getTasks();
 

@@ -32,7 +32,6 @@ public class HttpTaskServer {
     }
 
     public static void main(String[] args) throws IOException {
-
         HttpTaskServer s = new HttpTaskServer();
     }
 
@@ -66,7 +65,7 @@ public class HttpTaskServer {
                             exchange.sendResponseHeaders(404, 0);
                         }
                     } else if (path.contains("tasks/task")) {
-                        if (taskManager.getTasks() == null) {
+                        if (taskManager.getTasks().size() == 0) {
                             exchange.sendResponseHeaders(404, 0);
                         }
                         response = gson.toJson(taskManager.getTasks());
@@ -80,7 +79,7 @@ public class HttpTaskServer {
                             exchange.sendResponseHeaders(404, 0);
                         }
                     } else if (path.contains("tasks/subtask")) {
-                        if (taskManager.getSubtasks() == null) {
+                        if (taskManager.getSubtasks().size() == 0) {
                             exchange.sendResponseHeaders(404, 0);
                         } else {
                             response = gson.toJson(taskManager.getSubtasks());
@@ -95,7 +94,7 @@ public class HttpTaskServer {
                             exchange.sendResponseHeaders(404, 0);
                         }
                     } else if (path.contains("tasks/epic")) {
-                        if (taskManager.getEpics() == null) {
+                        if (taskManager.getEpics().size() == 0) {
                             exchange.sendResponseHeaders(404, 0);
                         } else {
                             response = gson.toJson(taskManager.getEpics());
@@ -123,14 +122,13 @@ public class HttpTaskServer {
                         Task task = gson.fromJson(line, Task.class);
                         if (taskManager.getTasks().containsKey(task.getTaskId())) {
                             taskManager.updateTask(task);
-                            System.out.println("sssssss");
                             exchange.sendResponseHeaders(200, 0);
                         } else {
                             taskManager.addTask(task);
                             exchange.sendResponseHeaders(201, 0);
                         }
                     } else if (path.contains("tasks/epic")) {
-                        Epic epic = gson.fromJson(bf.readLine(), Epic.class);
+                        Epic epic = gson.fromJson(line, Epic.class);
                         if (taskManager.getEpics().containsKey(epic.getTaskId())) {
                             taskManager.updateEpic(epic);
                             exchange.sendResponseHeaders(200, 0);
@@ -139,15 +137,15 @@ public class HttpTaskServer {
                             exchange.sendResponseHeaders(201, 0);
                         }
                     } else if (path.contains("tasks/subtask")) {
-                        Subtask subtask = gson.fromJson(bf.readLine(), Subtask.class);
+                        Subtask subtask = gson.fromJson(line, Subtask.class);
                         if (taskManager.getSubtasks().containsKey(subtask.getTaskId())) {
-                            taskManager.updateSubtask(subtask
-                            );
+                            taskManager.updateSubtask(subtask);
                             exchange.sendResponseHeaders(200, 0);
-                        } else {
-                            Epic epic = taskManager.getEpicById(subtask.getIdEpic());
-                            taskManager.addSubtask(subtask, epic);
+                        } else if (taskManager.getEpics().containsKey(subtask.getIdEpic())) {
+                            taskManager.addSubtask(subtask);
                             exchange.sendResponseHeaders(201, 0);
+                        } else {
+                            exchange.sendResponseHeaders(400, 0);
                         }
                     }
                     break;

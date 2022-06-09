@@ -54,7 +54,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     taskList.put(task.getTaskId(), task);
                 } else if (array[1].equals("SUBTASK")) {
                     Subtask subtask = new Subtask(array[2], array[4], statuses(array[3]), LocalDateTime.parse(array[6]),
-                            Long.parseLong(array[7]));
+                            Long.parseLong(array[7]), Integer.parseInt(array[5]));
                     subtask.setTaskId(Integer.parseInt(array[0]));
                     subtaskList.put(subtask.getTaskId(), subtask);
                 } else {
@@ -153,8 +153,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void addSubtask(Subtask subtask, Epic epic) {
-        super.addSubtask(subtask, epic);
+    public void addSubtask(Subtask subtask) {
+        super.addSubtask(subtask);
         save();
     }
 
@@ -205,12 +205,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         fb.addTask(task1);
         Epic epic = new Epic("Epic", "Epic");
         fb.addEpic(epic);
-        Subtask subtask1 = new Subtask("1", "1", Statuses.NEW, null, 0);
-        Subtask subtask2 = new Subtask("2", "2", Statuses.NEW, null, 0);
-        Subtask subtask3 = new Subtask("3", "3", Statuses.NEW, null, 0);
-        fb.addSubtask(subtask1, );
-        fb.addSubtask(subtask2, );
-        fb.addSubtask(subtask3, );
+        Subtask subtask1 = new Subtask("1", "1", Statuses.NEW, null, 0, epic.getTaskId());
+        Subtask subtask2 = new Subtask("2", "2", Statuses.NEW, null, 0, epic.getTaskId());
+        Subtask subtask3 = new Subtask("3", "3", Statuses.NEW, null, 0, epic.getTaskId());
+        fb.addSubtask(subtask1);
+        fb.addSubtask(subtask2);
+        fb.addSubtask(subtask3);
         System.out.println(fb.getEpics());
         System.out.println(fb.getEpicById(2));
         System.out.println(fb.getAllSubtasksOfEpic(2));

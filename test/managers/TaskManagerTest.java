@@ -23,14 +23,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
     protected void init() {
         task = new Task("T1", "T1", Statuses.NEW, null, 0);
         epic = new Epic("E1", "E1");
-        subtask1 = new Subtask("S1", "S1", Statuses.NEW, null, 0);
-        subtask2 = new Subtask("S2", "S2", Statuses.NEW, null, 0);
-        subtask3 = new Subtask("S3", "S3", Statuses.NEW, null, 0);
+        subtask1 = new Subtask("S1", "S1", Statuses.NEW, null, 0, epic.getTaskId());
+        subtask2 = new Subtask("S2", "S2", Statuses.NEW, null, 0, epic.getTaskId());
+        subtask3 = new Subtask("S3", "S3", Statuses.NEW, null, 0, epic.getTaskId());
         taskManager.addTask(task);
         taskManager.addEpic(epic);
-        taskManager.addSubtask(subtask1, );
-        taskManager.addSubtask(subtask2, );
-        taskManager.addSubtask(subtask3, );
+        taskManager.addSubtask(subtask1);
+        taskManager.addSubtask(subtask2);
+        taskManager.addSubtask(subtask3);
     }
 
     @Test
@@ -183,7 +183,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void getPrioritizedTask() {
         List<Task> prioritizedList = taskManager.getPrioritizedTask();
-        List<Task> list = List.of(task, subtask1, subtask3, subtask2);
+        List<Task> list = List.of(task, subtask1, subtask2, subtask3);
         assertEquals(list, prioritizedList);
     }
 }

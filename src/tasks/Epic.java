@@ -1,11 +1,15 @@
 package tasks;
 
+import managers.InMemoryTaskManager;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Epic extends Task {
     private ArrayList<Subtask> listOfSubtask;
@@ -13,10 +17,12 @@ public class Epic extends Task {
     public Epic(String taskName, String taskInfo) {
         this.taskName = taskName;
         this.taskInfo = taskInfo;
+        this.taskId = InMemoryTaskManager.getId();
+        listOfSubtask = new ArrayList<>();
     }
 
     public void setStartTime() {
-        if (listOfSubtask.size() != 0) {
+        if (sortedSubtaskList().size() != 0) {
             this.startTime = sortedSubtaskList().get(0).getStartTime();
         }
     }
@@ -30,7 +36,7 @@ public class Epic extends Task {
     }
 
     public void setDuration() {
-        if (listOfSubtask.size() >= 2) {
+        if (sortedSubtaskList().size() >= 2) {
             this.duration = Duration.between(sortedSubtaskList().get(0).getStartTime(),
                     sortedSubtaskList().get(sortedSubtaskList().size() - 1).getEndTime()).toMinutes();
         } else if (listOfSubtask.size() == 1) {
@@ -38,18 +44,24 @@ public class Epic extends Task {
         }
     }
 //
-    private ArrayList<Subtask> sortedSubtaskList() {
-        listOfSubtask.sort(new Comparator<Subtask>() {
+    private List<Subtask> sortedSubtaskList() {
+        List<Subtask> list = listOfSubtask.stream().filter(subtask -> subtask.getStartTime()!=null).
+                collect(Collectors.toList());
+        list.sort(new Comparator<Subtask>() {
             @Override
             public int compare(Subtask o1, Subtask o2) {
-                if (o1.getStartTime().isAfter(o2.getStartTime())) {
+                if (o1.getStartTime() == (null)) {
+                    return 1;
+                } else if (o2.getStartTime() == null) {
+                    return -1;
+                } else if (o1.getStartTime().isAfter(o2.getStartTime())) {
                     return 1;
                 } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
                     return -1;
                 } else return 0;
             }
         });
-        return listOfSubtask;
+        return list;
     }
 
     public ArrayList<Subtask> getListOfSubtask() {
