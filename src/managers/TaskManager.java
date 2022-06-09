@@ -1,11 +1,9 @@
 package managers;
 
 import tasks.Epic;
-import tasks.Statuses;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,17 +11,17 @@ import java.util.List;
 public interface TaskManager {
 
 
-    void addTask(Task task, Statuses status, LocalDateTime startTime, long duration);
+    void addTask(Task task);
 
     void addEpic(Epic epic);
 
-    void addSubtask(Subtask subtask, Epic epic, Statuses status, LocalDateTime startTime, long duration);
+    void addSubtask(Subtask subtask, Epic epic);
 
-    HashMap returnTasks();
+    HashMap getTasks();
 
-    HashMap returnEpic();
+    HashMap getEpics();
 
-    HashMap returnSubtasks();
+    HashMap getSubtasks();
 
     Task getTaskById(int id);
 
@@ -43,9 +41,9 @@ public interface TaskManager {
 
     void removeSubtaskById(int id);
 
-    void updateTask(Task task, Statuses status, LocalDateTime startTime, long duration);
+    void updateTask(Task task);
 
-    void updateSubtask(Subtask subtask, Statuses status, LocalDateTime startTime, long duration);
+    void updateSubtask(Subtask subtask);
 
     void updateEpic(Epic epic);
 

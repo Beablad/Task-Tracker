@@ -11,8 +11,8 @@ public class Epic extends Task {
     private ArrayList<Subtask> listOfSubtask;
 
     public Epic(String taskName, String taskInfo) {
-        super(taskName, taskInfo);
-        this.listOfSubtask = new ArrayList<>();
+        this.taskName = taskName;
+        this.taskInfo = taskInfo;
     }
 
     public void setStartTime() {

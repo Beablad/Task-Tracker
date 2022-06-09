@@ -10,10 +10,15 @@ public class Task {
     protected LocalDateTime startTime;
     protected long duration;
 
-    public Task(String taskName, String taskInfo) {
+    public Task(String taskName, String taskInfo, Statuses status, LocalDateTime startTime, long duration) {
         this.taskName = taskName;
         this.taskInfo = taskInfo;
-        this.taskStatus = Statuses.NEW;
+        this.taskStatus = status;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
+    public Task() {
     }
 
     public int getTaskId() {

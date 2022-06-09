@@ -21,7 +21,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     @Test
     public void createInMemoryTaskManager() {  // тут достаточно одного теста, проверить также эпики и сабтаски
         InMemoryTaskManager taskManager = new InMemoryTaskManager();
-        final HashMap<Integer, Task> taskList = taskManager.returnTasks();
+        final HashMap<Integer, Task> taskList = taskManager.getTasks();
         assertNotNull(taskList, "Возвращает пустой список задач");
         assertEquals(0, taskList.size(), "Возвращает пустой список задач");
     }

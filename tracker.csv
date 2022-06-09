@@ -1,2 +1,4 @@
 id,type,name,status,description,epic,startTime,duration 
+1,TASK,a,NEW,b,-,2022-01-01T00:00,0
+2,EPIC,a,NEW,b,-,null,0
 

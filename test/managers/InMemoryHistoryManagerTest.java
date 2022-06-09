@@ -11,17 +11,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class InMemoryHistoryManagerTest {
 
     HistoryManager hm = Managers.getDefaultHistoryManager();
-    Task task1 = new Task("1", "2");
-    Task task2 = new Task("2", "2");
-    Task task3 = new Task("3", "3");
-    Task task4 = new Task("4", "4");
-    Task task5 = new Task("5", "5");
-    Task task6 = new Task("6", "6");
-    Task task7 = new Task("7", "7");
-    Task task8 = new Task("8", "8");
-    Task task9 = new Task("9", "9");
-    Task task10 = new Task("10", "10");
-    Task task11 = new Task("11", "11");
+    Task task1 = new Task("1", "2", Statuses.NEW, null, 0);
+    Task task2 = new Task("2", "2", Statuses.NEW, null, 0);
+    Task task3 = new Task("3", "3", Statuses.NEW, null, 0);
+    Task task4 = new Task("4", "4", Statuses.NEW, null, 0);
+    Task task5 = new Task("5", "5", Statuses.NEW, null, 0);
+    Task task6 = new Task("6", "6", Statuses.NEW, null, 0);
+    Task task7 = new Task("7", "7", Statuses.NEW, null, 0);
+    Task task8 = new Task("8", "8", Statuses.NEW, null, 0);
+    Task task9 = new Task("9", "9", Statuses.NEW, null, 0);
+    Task task10 = new Task("10", "10", Statuses.NEW, null, 0);
+    Task task11 = new Task("11", "11", Statuses.NEW, null, 0);
 
 
     @Test
@@ -74,17 +74,17 @@ class InMemoryHistoryManagerTest {
 
     private void addInHistory(){
         InMemoryTaskManager tm = new InMemoryTaskManager();
-        tm.addTask(task1, Statuses.NEW, null, 0);
-        tm.addTask(task2, Statuses.NEW, null, 0);
-        tm.addTask(task3, Statuses.NEW, null, 0);
-        tm.addTask(task4, Statuses.NEW, null, 0);
-        tm.addTask(task5, Statuses.NEW, null, 0);
-        tm.addTask(task6, Statuses.NEW, null, 0);
-        tm.addTask(task7, Statuses.NEW, null, 0);
-        tm.addTask(task8, Statuses.NEW, null, 0);
-        tm.addTask(task9, Statuses.NEW, null, 0);
-        tm.addTask(task10, Statuses.NEW, null, 0);
-        tm.addTask(task11, Statuses.DONE, null, 0);
+        tm.addTask(task1);
+        tm.addTask(task2);
+        tm.addTask(task3);
+        tm.addTask(task4);
+        tm.addTask(task5);
+        tm.addTask(task6);
+        tm.addTask(task7);
+        tm.addTask(task8);
+        tm.addTask(task9);
+        tm.addTask(task10);
+        tm.addTask(task11);
         hm.add(task1);
         hm.add(task2);
         hm.add(task3);
