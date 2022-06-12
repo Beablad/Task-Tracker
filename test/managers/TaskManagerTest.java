@@ -50,7 +50,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void returnTasks() {
-        HashMap<Integer, Task> tasks = taskManager.getTasks();
+        List<Task> tasks = taskManager.getTasks();
         assertNotNull(tasks);
         assertEquals(1, tasks.size());
         assertEquals(task, tasks.get(1));
@@ -58,15 +58,15 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void returnEpics() {
-        HashMap<Integer, Epic> epics = taskManager.getEpics();
+        List<Epic> epics = taskManager.getEpics();
         assertNotNull(epics);
         assertEquals(1, epics.size());
-        assertEquals(epic, epics.get(2));
+        assertEquals(epic, epics.get(0));
     }
 
     @Test
     void returnSubtasks() {
-        HashMap<Integer, Subtask> subtasks = taskManager.getSubtasks();
+        List<Subtask> subtasks = taskManager.getSubtasks();
         assertNotNull(subtasks);
         assertEquals(3, subtasks.size());
         assertEquals(subtask1, subtasks.get(3));
@@ -119,7 +119,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void removeTaskById() {
         taskManager.removeTaskById(1);
         assertEquals(0, taskManager.getTasks().size());
-        assertNotEquals(task, taskManager.getTasks().get(1));
+        assertNotEquals(task, taskManager.getTasks().get(0));
     }
 
     @Test

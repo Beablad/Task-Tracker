@@ -6,6 +6,7 @@ import tasks.Statuses;
 import tasks.Task;
 
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -21,7 +22,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     @Test
     public void createInMemoryTaskManager() {  // тут достаточно одного теста, проверить также эпики и сабтаски
         InMemoryTaskManager taskManager = new InMemoryTaskManager();
-        final HashMap<Integer, Task> taskList = taskManager.getTasks();
+        final List<Task> taskList = taskManager.getTasks();
         assertNotNull(taskList, "Возвращает пустой список задач");
         assertEquals(0, taskList.size(), "Возвращает пустой список задач");
     }

@@ -5,7 +5,6 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public interface TaskManager {
@@ -17,11 +16,11 @@ public interface TaskManager {
 
     void addSubtask(Subtask subtask);
 
-    HashMap getTasks();
+    List<Task> getTasks();
 
-    HashMap getEpics();
+    List<Epic> getEpics();
 
-    HashMap getSubtasks();
+    List<Subtask> getSubtasks();
 
     Task getTaskById(int id);
 

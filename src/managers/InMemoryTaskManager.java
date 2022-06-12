@@ -15,26 +15,23 @@ public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Subtask> subtaskList;
     private static int taskId;
     HistoryManager inMemoryHistoryManager = Managers.getDefaultHistoryManager();
-    TreeSet<Task> prioritizedTasks = new TreeSet<>(new Comparator<Task>() {
-        @Override
-        public int compare(Task o1, Task o2) {
-            if (o1.getStartTime() == (null)) {
-                return 1;
-            } else if (o2.getStartTime() == null) {
-                return -1;
-            } else if (o1.getStartTime().isAfter(o2.getStartTime())) {
-                return 1;
-            } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
-                return -1;
-            } else return 0;
-        }
+    TreeSet<Task> prioritizedTasks = new TreeSet<>((o1, o2) -> {
+        if (o1.getStartTime() == (null)) {
+            return 1;
+        } else if (o2.getStartTime() == null) {
+            return -1;
+        } else if (o1.getStartTime().isAfter(o2.getStartTime())) {
+            return 1;
+        } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
+            return -1;
+        } else return 0;
     });
 
     public InMemoryTaskManager() {
         this.taskList = new HashMap<>();
         this.epicList = new HashMap<>();
         this.subtaskList = new HashMap<>();
-        this.taskId = 1;
+        taskId = 1;
     }
 
     public static int getId() {
@@ -42,14 +39,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addTask(Task task) {
-        try {
-            if (checkIntersections(task.getStartTime(), task.getDuration())) {
-                taskList.put(task.getTaskId(), task);
-                putInPrioritizedTask(task);
-            }
-        } catch (IntersectionException e) {
-            e.getMessage();
+    public void addTask(Task task) throws IntersectionException {
+        if (checkIntersections(task.getStartTime(), task.getDuration())) {
+            taskList.put(task.getTaskId(), task);
+            putInPrioritizedTask(task);
         }
     }
 
@@ -61,34 +54,30 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addSubtask(Subtask subtask) {
-        try {
-            if (checkIntersections(subtask.getStartTime(), subtask.getDuration())) {
-                Epic epic = epicList.get(subtask.getIdEpic());
-                epic.addSubtaskInEpic(subtask);
-                epic.setStartTime();
-                epic.setDuration();
-                subtaskList.put(subtask.getTaskId(), subtask);
-                checkEpicStatus(epic);
-                putInPrioritizedTask(subtask);
-            }
-        } catch (IntersectionException e) {
-            System.out.println(e.getMessage());
+        if (checkIntersections(subtask.getStartTime(), subtask.getDuration())) {
+            Epic epic = epicList.get(subtask.getIdEpic());
+            epic.addSubtaskInEpic(subtask);
+            epic.setStartTime();
+            epic.setDuration();
+            subtaskList.put(subtask.getTaskId(), subtask);
+            checkEpicStatus(epic);
+            putInPrioritizedTask(subtask);
         }
     }
 
     @Override
-    public HashMap getTasks() {
-        return taskList;
+    public List<Task> getTasks() {
+        return new ArrayList<>(taskList.values());
     }
 
     @Override
-    public HashMap getEpics() {
-        return epicList;
+    public List<Epic> getEpics() {
+        return new ArrayList<>(epicList.values());
     }
 
     @Override
-    public HashMap getSubtasks() {
-        return subtaskList;
+    public List<Subtask> getSubtasks() {
+        return new ArrayList<>(subtaskList.values());
     }
 
     @Override
@@ -164,7 +153,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private void checkEpicStatus(Epic epic) {
         ArrayList<Subtask> subtasks = epic.getListOfSubtask();
-        if (subtasks!=null && subtasks.size() != 0) {
+        if (subtasks != null && subtasks.size() != 0) {
             ArrayList<Statuses> listOfStatuses = new ArrayList<>();
             Statuses currentStatus = Statuses.NEW;
             int newCounter = 0;
@@ -233,29 +222,23 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getPrioritizedTask() {
-        List<Task> list = new ArrayList<>();
-        for (Task task : prioritizedTasks) {
-            list.add(task);
-
-        }
-        return list;
+        return new ArrayList<>(prioritizedTasks);
     }
 
-    private boolean checkIntersections(LocalDateTime startTime, long duration) {
+    private boolean checkIntersections(LocalDateTime startTime, long duration) throws IntersectionException {
         if (startTime != null) {
-            LocalDateTime start = startTime;
             LocalDateTime end = startTime.plusMinutes(duration);
             for (Task checkTask : prioritizedTasks) {
                 if (checkTask.getStartTime() != null) {
                     LocalDateTime startCheck = checkTask.getStartTime();
                     LocalDateTime endCheck = checkTask.getEndTime();
-                    if (start.isAfter(startCheck) && end.isBefore(endCheck)) {
+                    if (startTime.isAfter(startCheck) && end.isBefore(endCheck)) {
                         throw new IntersectionException("Данное время уже занято");
                     } else if (end.isAfter(startCheck) && (end.isBefore(endCheck) || end.isEqual(endCheck))) {
                         throw new IntersectionException("Данное время уже занято");
-                    } else if ((start.isAfter(startCheck) || start.isEqual(startCheck)) && start.isBefore(endCheck)) {
+                    } else if ((startTime.isAfter(startCheck) || startTime.isEqual(startCheck)) && startTime.isBefore(endCheck)) {
                         throw new IntersectionException("Данное время уже занято");
-                    } else if (startCheck.isAfter(start) && endCheck.isBefore(end)) {
+                    } else if (startCheck.isAfter(startTime) && endCheck.isBefore(end)) {
                         throw new IntersectionException("Данное время уже занято");
                     }
                 }

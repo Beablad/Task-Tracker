@@ -34,7 +34,7 @@ class HttpTaskServerTest {
     }
 
     @AfterEach
-    void stop() throws IOException {
+    void stop() {
         server.stop();
     }
 
@@ -101,26 +101,60 @@ class HttpTaskServerTest {
     void getTaskById() throws IOException, InterruptedException {
         URI url = URI.create("http://localhost:8080/tasks/task/?id=1");
         HttpRequest request = HttpRequest.newBuilder().GET().uri(url).build();
+        HttpResponse<String> response404 = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(404, response404.statusCode());
+        init();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(404, response.statusCode());
-        request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(toJson(TasksType.TASK)))
-                .uri(url).build();
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(201, response.statusCode());
+        assertEquals(200, response.statusCode());
     }
 
     @Test
     void getSubtaskById() throws IOException, InterruptedException {
-        addSubtask();
-        URI url = URI.create("http://localhost:8080/tasks/subtask/?id=2");
+        URI url = URI.create("http://localhost:8080/tasks/subtask/?id=3");
         HttpRequest request = HttpRequest.newBuilder().GET().uri(url).build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(404, response.statusCode());
-        request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(toJson(TasksType.SUBTASK)))
-                .uri(url).build();
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response404 = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(404, response404.statusCode());
+        init();
+        HttpResponse<String>  response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode());
     }
+
+    @Test
+    void clearTaskList () throws IOException, InterruptedException {
+        init();
+        URI url = URI.create("http://localhost:8080/tasks/task/");
+        HttpRequest request = HttpRequest.newBuilder().DELETE().uri(url).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+    }
+
+    @Test
+    void removeTask() throws IOException, InterruptedException{
+        init();
+        URI url = URI.create("http://localhost:8080/tasks/task/?id=1");
+        HttpRequest request = HttpRequest.newBuilder().DELETE().uri(url).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+    }
+
+    @Test
+    void removeEpic() throws IOException, InterruptedException{
+        init();
+        URI url = URI.create("http://localhost:8080/tasks/epic/?id=2");
+        HttpRequest request = HttpRequest.newBuilder().DELETE().uri(url).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+    }
+
+    @Test
+    void removeSubtask() throws IOException, InterruptedException{
+        init();
+        URI url = URI.create("http://localhost:8080/tasks/subtask/?id=3");
+        HttpRequest request = HttpRequest.newBuilder().DELETE().uri(url).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+    }
+
 
     String toJson(TasksType type) {
         if (type == TasksType.TASK) {
@@ -146,5 +180,6 @@ class HttpTaskServerTest {
         HttpRequest requestPostSubtask = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(toJson(TasksType.SUBTASK)))
                 .uri(urlSubtask).build();
         client.send(requestPostSubtask, HttpResponse.BodyHandlers.ofString());
+
     }
 }

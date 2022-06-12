@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class Managers {
 
     public static TaskManager getDefault() {
-        return new FileBackedTaskManager();
+        return new HttpTaskManager();
     }
 
     public static HistoryManager getDefaultHistoryManager(){
