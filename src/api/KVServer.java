@@ -1,12 +1,16 @@
 package api;
 
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import managers.Managers;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -28,27 +32,36 @@ public class KVServer {
         server.createContext("/load", this::load);
     }
 
-    private void load(HttpExchange h) {
-        String response = null;
-        String key = h.getRequestURI().getPath().substring("/load/".length());
+    private void load(HttpExchange h) throws IOException {
         try {
-            if (key.contains("tasks")) {
-                response = data.get("tasks");
-            } else if (key.contains("epic")) {
-                response = data.get("epic");
-            } else if (key.contains("subtask")) {
-                response = data.get("subtask");
-            } else if (key.contains("history")) {
-                response = data.get("history");
-            } else {
-                h.sendResponseHeaders(400, 0);
+            System.out.println("\n/load");
+            if (!hasAuth(h)) {
+                System.out.println("Запрос неавторизован, нужен параметр в query API_KEY со значением апи-ключа");
+                h.sendResponseHeaders(403, 0);
+                return;
             }
-            OutputStream os = h.getResponseBody();
-            assert response != null;
-            os.write(response.getBytes(UTF_8));
-            h.sendResponseHeaders(200, 0);
-        } catch (IOException e) {
-            System.out.println("Неверный запрос.");
+
+            if ("GET".equals(h.getRequestMethod())) {
+                String key = h.getRequestURI().getPath().substring("/load/".length());
+                if (key.isEmpty()) {
+                    System.out.println("Key для сохранения пустой. Key указывается в пути: /load/{key}");
+                    h.sendResponseHeaders(400, 0);
+                    return;
+                }
+                String value = data.get(key);
+                if (value != null) {
+                    sendText(h, value);
+                    System.out.println("Значение для ключа " + key + " успешно получено!");
+                } else {
+                    System.out.println("Значение для ключа " + key + " не найдено");
+                    h.sendResponseHeaders(404, 0);
+                }
+            } else {
+                System.out.println("/load ждут GET запрос, а получил: " + h.getRequestMethod());
+                h.sendResponseHeaders(404, 0);
+            }
+        } finally {
+            h.close();
         }
     }
 

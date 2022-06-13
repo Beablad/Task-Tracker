@@ -5,6 +5,7 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public interface TaskManager {
@@ -53,4 +54,12 @@ public interface TaskManager {
     void removeHistory(int id);
 
     List<Task> getPrioritizedTask();
+
+    int getId();
+
+    public HashMap<Integer, Task> taskMap();
+
+    public HashMap<Integer, Epic> epicMap();
+
+    public HashMap<Integer, Subtask> subtaskMap();
 }

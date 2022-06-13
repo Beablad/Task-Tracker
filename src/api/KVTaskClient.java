@@ -19,23 +19,13 @@ public class KVTaskClient {
         apiKey = registerApiKey();
     }
 
-    public URI getUrl() {
-        return url;
-    }
-
     public void put(String key, String json) {
         HttpRequest httpRequest = requestBuilder.POST(HttpRequest.BodyPublishers.ofString(json))
                 .uri(URI.create(url + "/save/" + key + "?API_KEY=" + apiKey))
                 .header("Accept", "application/json")
                 .build();
-
-        String dataResponse;
-        HttpResponse<String> httpResponse;
         try {
-            httpResponse = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            if (httpResponse.statusCode() == 200) {
-                dataResponse = httpResponse.body();
-            }
+            client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             throw new ManagerSaveException("Что-то пошло не так");
         }

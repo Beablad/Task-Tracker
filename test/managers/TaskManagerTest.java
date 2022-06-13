@@ -35,17 +35,17 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void addTask() {
-        assertEquals(task, taskManager.getTasks().get(1));
+        assertEquals(task, taskManager.getTasks().get(0));
     }
 
     @Test
     void addEpic() {
-        assertEquals(epic, taskManager.getEpics().get(2));
+        assertEquals(epic, taskManager.getEpics().get(0));
     }
 
     @Test
     void addSubtask() {
-        assertEquals(subtask1, taskManager.getSubtasks().get(3));
+        assertEquals(subtask1, taskManager.getSubtasks().get(0));
     }
 
     @Test
@@ -53,7 +53,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         List<Task> tasks = taskManager.getTasks();
         assertNotNull(tasks);
         assertEquals(1, tasks.size());
-        assertEquals(task, tasks.get(1));
+        assertEquals(task, tasks.get(0));
     }
 
     @Test
@@ -69,9 +69,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         List<Subtask> subtasks = taskManager.getSubtasks();
         assertNotNull(subtasks);
         assertEquals(3, subtasks.size());
-        assertEquals(subtask1, subtasks.get(3));
-        assertEquals(subtask2, subtasks.get(4));
-        assertEquals(subtask3, subtasks.get(5));
+        assertEquals(subtask1, subtasks.get(0));
+        assertEquals(subtask2, subtasks.get(1));
+        assertEquals(subtask3, subtasks.get(2));
     }
 
     @Test
@@ -119,42 +119,36 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void removeTaskById() {
         taskManager.removeTaskById(1);
         assertEquals(0, taskManager.getTasks().size());
-        assertNotEquals(task, taskManager.getTasks().get(0));
     }
 
     @Test
     void removeEpicById() {
         taskManager.removeEpicById(2);
-        System.out.println(taskManager.getSubtasks());
-
         assertEquals(0, taskManager.getEpics().size());
-        assertNotEquals(task, taskManager.getEpics().get(2));
     }
 
     @Test
     void removeSubtaskById() {
         taskManager.removeSubtaskById(3);
         assertEquals(2, taskManager.getSubtasks().size());
-        assertNotEquals(subtask1, taskManager.getSubtasks().get(3));
     }
 
     @Test
     void updateTask() {
         taskManager.updateTask(task);
-        assertEquals(task, taskManager.getTasks().get(1));
+        assertEquals(task, taskManager.getTasks().get(0));
     }
 
     @Test
     void updateSubtask() {
-        taskManager.updateSubtask(subtask1
-        );
-        assertEquals(subtask1, taskManager.getSubtasks().get(3));
+        taskManager.updateSubtask(subtask1);
+        assertEquals(subtask1, taskManager.getSubtasks().get(0));
     }
 
     @Test
     void updateEpic() {
         taskManager.updateEpic(epic);
-        assertEquals(epic, taskManager.getEpics().get(2));
+        assertEquals(epic, taskManager.getEpics().get(0));
     }
 
     @Test

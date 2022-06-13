@@ -1,14 +1,12 @@
 package tasks;
 
-import managers.InMemoryTaskManager;
-
 import java.time.LocalDateTime;
 
 public class Task {
     protected String taskName;
     protected String taskInfo;
     protected Statuses taskStatus;
-    protected int taskId;
+    protected int taskId = 0;
     protected LocalDateTime startTime;
     protected long duration;
 
@@ -18,7 +16,6 @@ public class Task {
         this.taskStatus = status;
         this.startTime = startTime;
         this.duration = duration;
-        this.taskId = InMemoryTaskManager.getId();
     }
 
     public Task() {
@@ -60,16 +57,8 @@ public class Task {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
     public long getDuration() {
         return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
     }
 
     public LocalDateTime getEndTime (){
@@ -77,6 +66,14 @@ public class Task {
             return null;
         }
         return startTime.plusMinutes(duration);
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
     @Override

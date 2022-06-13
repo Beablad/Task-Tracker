@@ -1,4 +1,9 @@
+import api.HttpTaskServer;
 import api.KVServer;
+import managers.HttpTaskManager;
+import managers.Managers;
+import tasks.Statuses;
+import tasks.Task;
 
 import java.io.IOException;
 
@@ -6,8 +11,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         new KVServer().start();
-
-        String a = "a,a";
-        System.out.println(a.split(",")[0] + a.split(",")[1]);
+        new HttpTaskServer();
     }
 }
