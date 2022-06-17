@@ -43,7 +43,7 @@ public class KVTaskClient {
                 dataResponse = httpResponse.body();
             }
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println("Данных на сервере нет.");
         }
         return dataResponse;
     }
