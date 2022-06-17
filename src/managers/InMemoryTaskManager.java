@@ -168,7 +168,9 @@ public class InMemoryTaskManager implements TaskManager {
             int newCounter = 0;
             int doneCounter = 0;
             for (Subtask subtask : subtasks) {
-                listOfStatuses.add(subtask.getTaskStatus());
+                if (subtask.getTaskStatus()!=null){
+                    listOfStatuses.add(subtask.getTaskStatus());
+                }
             }
             for (Statuses status : listOfStatuses) {
                 if (status.equals(Statuses.DONE)) {

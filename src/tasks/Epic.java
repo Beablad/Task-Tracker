@@ -14,12 +14,10 @@ public class Epic extends Task {
     public Epic(String taskName, String taskInfo) {
         this.taskName = taskName;
         this.taskInfo = taskInfo;
-        this.taskId = Managers.getDefault().getId();
-        listOfSubtask = new ArrayList<>();
     }
 
     public void setStartTime() {
-        if (sortedSubtaskList().size() != 0) {
+        if (sortedSubtaskList()!=null && sortedSubtaskList().size() != 0) {
             this.startTime = sortedSubtaskList().get(0).getStartTime();
         }
     }
@@ -33,22 +31,26 @@ public class Epic extends Task {
     }
 
     public void setDuration() {
-        if (sortedSubtaskList().size() >= 2) {
+        if (sortedSubtaskList()==null){
+            duration = 0;
+        } else if (sortedSubtaskList().size() >= 2) {
             this.duration = Duration.between(sortedSubtaskList().get(0).getStartTime(),
                     sortedSubtaskList().get(sortedSubtaskList().size() - 1).getEndTime()).toMinutes();
         } else if (listOfSubtask.size() == 1) {
             this.duration = listOfSubtask.get(0).getDuration();
-        } else duration = 0;
+        }
     }
 //
     private List<Subtask> sortedSubtaskList() {
-        return listOfSubtask.stream().filter(subtask -> subtask.getStartTime() != null).sorted((o1, o2) -> {
-            if (o1.getStartTime().isAfter(o2.getStartTime())) {
-                return 1;
-            } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
-                return -1;
-            } else return 0;
-        }).collect(Collectors.toList());
+        if (listOfSubtask!=null){
+            return listOfSubtask.stream().filter(subtask -> subtask.getStartTime() != null).sorted((o1, o2) -> {
+                if (o1.getStartTime().isAfter(o2.getStartTime())) {
+                    return 1;
+                } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                    return -1;
+                } else return 0;
+            }).collect(Collectors.toList());
+        } else return null;
     }
 
     public ArrayList<Subtask> getListOfSubtask() {
@@ -56,7 +58,12 @@ public class Epic extends Task {
     }
 
     public void addSubtaskInEpic(Subtask subtask) {
-        listOfSubtask.add(subtask);
+        if (listOfSubtask==null){
+            listOfSubtask = new ArrayList<>();
+            listOfSubtask.add(subtask);
+        } else {
+            listOfSubtask.add(subtask);
+        }
     }
 
     public void removeSubtaskInEpic(Subtask subtask) {

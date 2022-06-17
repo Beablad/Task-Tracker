@@ -30,8 +30,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     @Test
     public void checkIdEpicInSubtask() {
         assertEquals(2, subtask1.getIdEpic());
-        assertEquals(2, subtask2.getIdEpic());
-        assertEquals(2, subtask3.getIdEpic());
     }
 
     @Test

@@ -51,7 +51,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     @Test
     void checkLoadFromFile (){
         FileBackedTaskManager fbtm = FileBackedTaskManager.loadFromFile();
-        Epic epic = fbtm.epicMap.get(1);
+        Epic epic = fbtm.epicMap.get(4);
         try (BufferedReader fr = new BufferedReader(new FileReader("tracker.csv"))){
             fr.readLine();
             String string = fr.readLine();

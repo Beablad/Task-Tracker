@@ -49,18 +49,17 @@ public class KVTaskClient {
     }
 
     public String registerApiKey() {
-        HttpRequest httpRequest = requestBuilder.GET().uri(URI.create(url + "/register"))
-                .header("Accept", "application/json")
+        HttpRequest httpRequest = requestBuilder.GET().uri(URI.create(url + "register"))
                 .build();
         String dataResponse = null;
-        HttpResponse<String> httpResponse;
+
         try {
-            httpResponse = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> httpResponse = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if (httpResponse.statusCode() == 200) {
                 dataResponse = httpResponse.body();
             }
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            e.getMessage();
         }
         return dataResponse;
     }

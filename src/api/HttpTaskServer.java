@@ -24,7 +24,7 @@ public class HttpTaskServer {
     HttpServer server;
     private final int PORT = 8080;
     private final Gson gson;
-    private final TaskManager taskManager;
+    public final TaskManager taskManager;
 
     public HttpTaskServer() throws IOException {
         server = HttpServer.create(new InetSocketAddress(PORT), 0);
@@ -37,9 +37,6 @@ public class HttpTaskServer {
     public class TaskHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-           Task task1 = new Task("a", "b", Statuses.NEW,
-                    LocalDateTime.of(2022,1,22,9,0), 10);
-            //taskManager.addEpic(new Epic(null, null));
             String method = exchange.getRequestMethod();
             String path = exchange.getRequestURI().getPath();
             String query = "";
@@ -53,7 +50,7 @@ public class HttpTaskServer {
                         if (query.contains("id=") && path.contains("tasks/subtask/epic")) {
                             int id = Integer.parseInt(query.split("=")[1]);
                             if (taskManager.getAllSubtasksOfEpic(id) == null) {
-                                System.out.println("Не найждено задач.");
+                                System.out.println("Не найдено задач.");
                                 exchange.sendResponseHeaders(404, 0);
                             } else {
                                 response = gson.toJson(taskManager.getAllSubtasksOfEpic(id));
@@ -65,12 +62,12 @@ public class HttpTaskServer {
                                 response = gson.toJson(taskManager.getTaskById(id));
                                 exchange.sendResponseHeaders(200, 0);
                             } else {
-                                System.out.println("Не найждено задач.");
+                                System.out.println("Не найдено задач.");
                                 exchange.sendResponseHeaders(404, 0);
                             }
                         } else if (path.contains("tasks/task")) {
                             if (taskManager.getTasks().size() == 0) {
-                                System.out.println("Не найждено задач.");
+                                System.out.println("Не найдено задач.");
                                 exchange.sendResponseHeaders(404, 0);
                             }
                             response = gson.toJson(taskManager.getTasks());
@@ -81,12 +78,12 @@ public class HttpTaskServer {
                                 response = gson.toJson(taskManager.getSubtaskById(id));
                                 exchange.sendResponseHeaders(200, 0);
                             } else {
-                                System.out.println("Не найждено задач.");
+                                System.out.println("Не найдено задач.");
                                 exchange.sendResponseHeaders(404, 0);
                             }
                         } else if (path.contains("tasks/subtask")) {
                             if (taskManager.getSubtasks().size() == 0) {
-                                System.out.println("Не найждено задач.");
+                                System.out.println("Не найдено задач.");
                                 exchange.sendResponseHeaders(404, 0);
                             } else {
                                 response = gson.toJson(taskManager.getSubtasks());
@@ -95,15 +92,15 @@ public class HttpTaskServer {
                         } else if (query.contains("id=") && path.contains("tasks/epic")) {
                             int id = Integer.parseInt(query.split("=")[1]);
                             if (taskManager.getEpics().contains(taskManager.getEpicById(id))) {
-                                response = gson.toJson(taskManager.getEpicById(id));
+                                response = gson.toJson(taskManager.epicMap().get(id));
                                 exchange.sendResponseHeaders(200, 0);
                             } else {
-                                System.out.println("Не найждено задач.");
+                                System.out.println("Не найдено задач.");
                                 exchange.sendResponseHeaders(404, 0);
                             }
                         } else if (path.contains("tasks/epic")) {
                             if (taskManager.getEpics().size() == 0) {
-                                System.out.println("Не найждено задач.");
+                                System.out.println("Не найдено задач.");
                                 exchange.sendResponseHeaders(404, 0);
                             } else {
                                 response = gson.toJson(taskManager.getEpics());
@@ -163,8 +160,7 @@ public class HttpTaskServer {
                             }
                         } else if (path.contains("tasks/subtask")) {
                             Subtask subtask = gson.fromJson(line, Subtask.class);
-                            if (!taskManager.subtaskMap().containsKey(subtask.getTaskId()) &&
-                                    taskManager.epicMap().containsKey(subtask.getIdEpic())) {
+                            if (!taskManager.subtaskMap().containsKey(subtask.getTaskId())) {
                                 try {
                                     taskManager.addSubtask(subtask);
                                     System.out.println("Подзадача успешно добавлена.");

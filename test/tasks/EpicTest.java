@@ -10,9 +10,9 @@ class EpicTest {
 
     TaskManager fb = Managers.getDefault();
     Epic epic = new Epic("a", "b");
-    Subtask subtask = new Subtask("a", "b", Statuses.NEW, null, 0, epic.getTaskId());
-    Subtask subtask1 = new Subtask("a", "b", Statuses.NEW, null, 0, epic.getTaskId());
-    Subtask subtask2 = new Subtask("a", "b", Statuses.NEW, null, 0, epic.getTaskId());
+    Subtask subtask = new Subtask("a", "b", Statuses.NEW, null, 0, epic);
+    Subtask subtask1 = new Subtask("a", "b", Statuses.NEW, null, 0, epic);
+    Subtask subtask2 = new Subtask("a", "b", Statuses.NEW, null, 0, epic);
 
     @Test
     void checkStatusWithoutSubtask() {
